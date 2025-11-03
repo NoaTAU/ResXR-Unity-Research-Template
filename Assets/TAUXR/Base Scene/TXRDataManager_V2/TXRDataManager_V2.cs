@@ -56,10 +56,17 @@ namespace TXRData
         private readonly List<IContinuousCollector> _continuousCollectors = new List<IContinuousCollector>();
         private OVRFaceCollector _faceCollector;
 
+        // Live Monitoring Events
+        // Low-GC, read-only notification (UI pulls & copies what it needs)
+        public event Action<ContinuousSample> OnContinuousSample; // Fired once per physics tick, right before writing ContinuousData csv
+        public event Action<FaceExpressionSample> OnFaceExpressionSample; // Fired once per physics tick, right before writing FaceExpressions csv
+
+
         #endregion
 
         #region unity lifecycle
-        private void Awake()
+        // Change the method declaration to override the base class implementation
+        protected override void DoInAwake()
         {
             // 0) session time suffix
             sessionTime = DateTime.UtcNow.ToString("yyyy.MM.dd_HH-mm");
@@ -146,30 +153,65 @@ namespace TXRData
 
         private void FixedUpdate()
         {
+            // sample time
             float t = Time.realtimeSinceStartup;
 
-            // ContinuousData row
+            #region [Continuous Data] Collect + fire live monitor + write to file
+
+            // collect
             _continuousRow.Clear();
-            _continuousRow.TrySet("timeSinceStartup", t);                        // friendly setter :contentReference[oaicite:9]{index=9}
+            _continuousRow.TrySet("timeSinceStartup", t);
             for (int i = 0; i < _continuousCollectors.Count; i++)
+            {
                 _continuousCollectors[i].Collect(_continuousRow, t);
+            }
+
+            // live monitor tap (ContinuousData) – only if there are subscribers
+            if (OnContinuousSample != null)
+            {
+                var sample = new ContinuousSample(
+                    t,
+                    _continuousSchema,
+                    _continuousRow.ValuesArray,
+                    _continuousRow.ColumnIsSetMask
+                );
+                OnContinuousSample(sample);
+            }
 
             // write row
             _continuousWriter.WriteRow(_continuousSchema,
                                        _continuousRow.ValuesArray,
-                                       _continuousRow.ColumnIsSetMask);         // WriteRow signature 
+                                       _continuousRow.ColumnIsSetMask);
 
-            // FaceExpressions row
+            #endregion
+
+            #region [Face Expressions] Collect + fire live monitor + write to file
+
+            // collect 
             if (recordFaceExpressions && _faceCollector != null)
             {
                 _faceRow.Clear();
                 _faceRow.TrySet("timeSinceStartup", t);
                 _faceCollector.Collect(_faceRow, t);
 
+                // live monitor tap (FaceExpressions) – only if there are subscribers
+                if (OnFaceExpressionSample != null)
+                {
+                    var faceSample = new FaceExpressionSample(
+                        t,
+                        _faceSchema,
+                        _faceRow.ValuesArray,
+                        _faceRow.ColumnIsSetMask
+                    );
+                    OnFaceExpressionSample(faceSample);
+                }
+
                 _faceWriter.WriteRow(_faceSchema,
                                      _faceRow.ValuesArray,
                                      _faceRow.ColumnIsSetMask);
             }
+
+            #endregion
         }
 
         private void OnDestroy()
@@ -353,7 +395,26 @@ namespace TXRData
 
     }
 
+    #region helper structs
+    public readonly struct ContinuousSample
+    {
+        public readonly float sampleTime; // timeSinceStartup at the beginning of the sample window
+        public readonly ColumnIndex schema;
+        public readonly object[] values;
+        public readonly System.Collections.BitArray columnIsSetMask; // which columns were written this frame
+        public ContinuousSample(float t, ColumnIndex s, object[] v, System.Collections.BitArray m)
+        { sampleTime = t; schema = s; values = v; columnIsSetMask = m; }
+    }
 
+    public readonly struct FaceExpressionSample
+    {
+        public readonly float sampleTime;
+        public readonly ColumnIndex schema;
+        public readonly object[] values;
+        public readonly System.Collections.BitArray columnIsSetMask;
+        public FaceExpressionSample(float t, ColumnIndex s, object[] v, System.Collections.BitArray m)
+        { sampleTime = t; schema = s; values = v; columnIsSetMask = m; }
+    }
 
 
     [Serializable]
@@ -392,6 +453,8 @@ namespace TXRData
             File.WriteAllText(path, json);
         }
     }
+
+    #endregion
 }
 
 

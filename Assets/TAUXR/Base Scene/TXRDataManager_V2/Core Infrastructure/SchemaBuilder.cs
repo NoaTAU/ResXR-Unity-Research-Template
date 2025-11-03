@@ -199,9 +199,12 @@ namespace TXRData
             BuildContinuousDataV2(RecordingOptions recordingOptions)
         {
             SchemaBuilder schemaBuilder = new SchemaBuilder();
-
-            int detectedHandBoneCount = DetectHandBoneCount(out bool handDetectionOk);
-            int detectedBodyJointCount = DetectBodyJointCount(out bool bodyDetectionOk);
+            int detectedHandBoneCount = 0;
+            bool handDetectionOk = false;
+            if (recordingOptions.includeHands) detectedHandBoneCount = DetectHandBoneCount(out handDetectionOk);
+            int detectedBodyJointCount = 0;
+            bool bodyDetectionOk = false;
+            if (recordingOptions.includeBody) detectedBodyJointCount = DetectBodyJointCount(out bodyDetectionOk);
 
             // Timing
             schemaBuilder.Add("timeSinceStartup"); // Unity Time.realTimeSinceStartup

@@ -243,6 +243,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 127758893875735808, guid: 967af0223632a1649afa8f1a4520fc54, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 340261313875707779, guid: 967af0223632a1649afa8f1a4520fc54, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2230,11 +2234,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3218453330121799869, guid: 4cba690ca96e6b14fae904cb9db7120b, type: 3}
       propertyPath: saveFilePath
-      value: D:\Data Manager V2 files\Test Data From Editor\27.10-xrHands2
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3218453330121799869, guid: 4cba690ca96e6b14fae904cb9db7120b, type: 3}
       propertyPath: exportInEditor
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218453330121799869, guid: 4cba690ca96e6b14fae904cb9db7120b, type: 3}
+      propertyPath: recordingOptions.includeBody
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5715946916250606740, guid: 4cba690ca96e6b14fae904cb9db7120b, type: 3}
       propertyPath: m_Name
