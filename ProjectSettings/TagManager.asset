@@ -3,12 +3,33 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - PlayerHead
+  - PinchPoint
+  - Toucher
+  - QDSUIToggleButton
+  - QDSUIIcon
+  - QDSUIToggleBorderlessButton
+  - QDSUITextSecondaryColor
+  - QDSUIToggleCheckboxRadio
+  - QDSUITooltip
+  - QDSUISharedThemeColor
+  - QDSUIToggleSwitch
+  - QDSUIAccentColor
+  - QDSUIBorderlessButton
+  - QDSUIDestructiveButton
+  - QDSUISecondaryButton
+  - QDSUIPrimaryButton
+  - QDSUITextInvertedColor
+  - QDSUITextSecondaryInvertedColor
+  - QDSUIBackplateGradient
+  - QDSUISection
+  - QDSUITextInputField
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Overlay UI
   - Water
   - UI
   - 
@@ -36,7 +57,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - OVROverlayCanvas Rendering
   m_SortingLayers:
   - name: Default
     uniqueID: 0

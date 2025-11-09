@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: TAUXR
-  productName: TAUXR Research Template
+  productName: TAUXR Research Template - Live Monitor
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}
@@ -145,6 +145,8 @@ PlayerSettings:
   bundleVersion: 1.0+20251028-154349-44BC979B
   preloadedAssets:
   - {fileID: 11400000, guid: bd5e1cafdb78ec247aec660ededc6591, type: 2}
+  - {fileID: 677025488240970214, guid: df4bf4de266c0e44bafe9095d6e989e8, type: 2}
+  - {fileID: -6832510543930548252, guid: defe9f001708b2d4a991163f9523dac2, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -166,14 +168,14 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.TAUXR.TAUXRResearchTemplate
+    Android: com.TAUXR.TAUXRResearchTemplateLiveMonitor
   buildNumber:
     Standalone: 0
     VisionOS: 0
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 94330890
+  AndroidBundleVersionCode: 94440802
   AndroidMinSdkVersion: 32
   AndroidTargetSdkVersion: 32
   AndroidPreferredInstallLocation: 0
@@ -256,7 +258,7 @@ PlayerSettings:
   clonedFromGUID: 00000000000000000000000000000000
   templatePackageId: 
   templateDefaultScene: 
-  useCustomMainManifest: 0
+  useCustomMainManifest: 1
   useCustomLauncherManifest: 0
   useCustomMainGradleTemplate: 0
   useCustomLauncherGradleManifest: 0
@@ -801,7 +803,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 2
+  activeInputHandler: 1
   windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0

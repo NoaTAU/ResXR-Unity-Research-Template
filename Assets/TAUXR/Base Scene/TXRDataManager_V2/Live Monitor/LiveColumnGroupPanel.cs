@@ -6,14 +6,22 @@ using UnityEngine;
 
 public class LiveColumnGroupPanel : MonoBehaviour
 {
+    [Header("Live Stream Source")]
     public LiveStreamKind liveStreamKind;
     public LiveColumnGroupKind liveColumnGroupKind;
 
+    [Header("References")]
     public Transform contentGridContainer;
     public GameObject textBlockPrefab;
+    public GameObject Back;
+
+
+    [Header("Settings")]
     [Range(1, 60)]
     public float UIrefreshRateHz = 15f;
     public int entriesPerBlock = 16;
+    public bool expandOnStart = false;
+
 
     private LiveMonitorService _tap;
     private ColumnIndex _schema;
@@ -31,6 +39,7 @@ public class LiveColumnGroupPanel : MonoBehaviour
             enabled = false;
             return;
         }
+        ExpandPanel(expandOnStart);
 
         StartCoroutine(WaitForSchemaAndBuild());
     }
@@ -156,6 +165,12 @@ public class LiveColumnGroupPanel : MonoBehaviour
             case bool b: return b ? "true" : "false";
             default: return value.ToString();
         }
+    }
+
+    public void ExpandPanel(bool expand)
+    {
+        contentGridContainer.gameObject.SetActive(expand);
+        Back.SetActive(expand);
     }
 }
 
