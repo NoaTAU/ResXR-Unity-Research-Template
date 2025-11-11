@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.046}
-  m_SizeDelta: {x: 0.3, y: 0.85}
+  m_SizeDelta: {x: 0.67, y: 0.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7530083068417187038
 MeshRenderer:
@@ -102,7 +102,33 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Some_Key: 00000'
+  m_text: "LeftHand_Root_px: \u2205\nLeftHand_Root_py: \u2205\nLeftHand_Root_pz:
+    \u2205\nLeftHand_Root_qx: \u2205\nLeftHand_Root_qy: \u2205\nLeftHand_Root_qz:
+    \u2205\nLeftHand_Root_qw: \u2205\nLeftHand_HandScale: \u2205\nLeft_XRHand_Palm_x:
+    \u2205\nLeft_XRHand_Palm_y: \u2205\nLeft_XRHand_Palm_z: \u2205\nLeft_XRHand_Palm_qx:
+    \u2205\nLeft_XRHand_Palm_qy: \u2205\nLeft_XRHand_Palm_qz: \u2205\nLeft_XRHand_Palm_qw:
+    \u2205\nLeft_XRHand_Wrist_x: \u2205\nLeft_XRHand_Wrist_y: \u2205\nLeft_XRHand_Wrist_z:
+    \u2205\nLeft_XRHand_Wrist_qx: \u2205\nLeft_XRHand_Wrist_qy: \u2205\nLeft_XRHand_Wrist_qz:
+    \u2205\nLeft_XRHand_Wrist_qw: \u2205\nLeft_XRHand_ThumbMetacarpal_x: \u2205\nLeft_XRHand_ThumbMetacarpal_y:
+    \u2205\nLeft_XRHand_ThumbMetacarpal_z: \u2205\nLeft_XRHand_ThumbMetacarpal_qx:
+    \u2205\nLeft_XRHand_ThumbMetacarpal_qy: \u2205\nLeft_XRHand_ThumbMetacarpal_qz:
+    \u2205\nLeft_XRHand_ThumbMetacarpal_qw: \u2205\nLeft_XRHand_ThumbProximal_x:
+    \u2205\nLeft_XRHand_ThumbProximal_y: \u2205\nLeft_XRHand_ThumbProximal_z: \u2205\nLeft_XRHand_ThumbProximal_qx:
+    \u2205\nLeft_XRHand_ThumbProximal_qy: \u2205\nLeft_XRHand_ThumbProximal_qz: \u2205\nLeft_XRHand_ThumbProximal_qw:
+    \u2205\nLeft_XRHand_ThumbDistal_x: \u2205\nLeft_XRHand_ThumbDistal_y: \u2205\nLeft_XRHand_ThumbDistal_z:
+    \u2205\nLeft_XRHand_ThumbDistal_qx: \u2205\nLeft_XRHand_ThumbDistal_qy: \u2205\nLeft_XRHand_ThumbDistal_qz:
+    \u2205\nLeft_XRHand_ThumbDistal_qw: \u2205\nLeft_XRHand_ThumbTip_x: \u2205\nLeft_XRHand_ThumbTip_y:
+    \u2205\nLeft_XRHand_ThumbTip_z: \u2205\nLeft_XRHand_ThumbTip_qx: \u2205\nLeft_XRHand_ThumbTip_qy:
+    \u2205\nLeft_XRHand_ThumbTip_qz: \u2205\nLeft_XRHand_ThumbTip_qw: \u2205\nLeft_XRHand_IndexMetacarpal_x:
+    \u2205\nLeft_XRHand_IndexMetacarpal_y: \u2205\nLeft_XRHand_IndexMetacarpal_z:
+    \u2205\nLeft_XRHand_IndexMetacarpal_qx: \u2205\nLeft_XRHand_IndexMetacarpal_qy:
+    \u2205\nLeft_XRHand_IndexMetacarpal_qz: \u2205\nLeft_XRHand_IndexMetacarpal_qw:
+    \u2205\nLeft_XRHand_IndexProximal_x: \u2205\nLeft_XRHand_IndexProximal_y: \u2205\nLeft_XRHand_IndexProximal_z:
+    \u2205\nLeft_XRHand_IndexProximal_qx: \u2205\nLeft_XRHand_IndexProximal_qy: \u2205\nLeft_XRHand_IndexProximal_qz:
+    \u2205\nLeft_XRHand_IndexProximal_qw: \u2205\nLeft_XRHand_IndexIntermediate_x:
+    \u2205\nLeft_XRHand_IndexIntermediate_y: \u2205\nLeft_XRHand_IndexIntermediate_z:
+    \u2205\nLeft_XRHand_IndexIntermediate_qx: \u2205\nLeft_XRHand_IndexIntermediate_qy:
+    \u2205\nLeft_XRHand_IndexIntermediate_qz: \u2205"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -167,7 +193,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: -1.586649}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
