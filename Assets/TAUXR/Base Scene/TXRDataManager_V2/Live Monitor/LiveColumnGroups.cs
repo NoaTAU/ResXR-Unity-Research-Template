@@ -29,6 +29,15 @@ namespace TXRData
         Other
     }
 
+    public enum LiveColumnSubGroupKind
+    {
+        All,
+        FlagsOnly,
+        ValuesOnly,
+        TimeOnly
+    }
+
+
     public sealed class LiveColumnGroup
     {
         public LiveColumnGroupKind Kind;
