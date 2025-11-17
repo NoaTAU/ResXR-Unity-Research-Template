@@ -15,6 +15,46 @@ using static TXRData.BuildInfoLoader;
 
 namespace TXRData
 {
+    #region custom data classes defenitions
+
+    public class TXRLogs : CustomDataClass
+    {
+        public string TableName => "TXRLogs";
+
+        public float timeSinceStartup;
+        public string message;
+        public TXRLogs(float t, string msg)
+        {
+            timeSinceStartup = t;
+            message = msg;
+        }
+    }
+
+    public class TrialsData : CustomDataClass
+    {
+        public string TableName => "TrialsData";
+        public string Session; // can be changed to int if needed
+        public string Round; // can be changed to int if needed
+        public string Trial; // can be changed to int if needed
+        public string TrialName; // unique name for the trial
+        public float StartTime; // timeSinceStartup at trial start
+        public float EndTime; // timeSinceStartup at trial end
+
+        public TrialsData(string session, string round, string trial, string trialName, float startTime, float endTime)
+        {
+            Session = session;
+            Round = round;
+            Trial = trial;
+            TrialName = trialName;
+            StartTime = startTime;
+            EndTime = endTime;
+        }
+
+    }
+
+    #endregion
+
+
     public sealed class TXRDataManager_V2 : TXRSingleton<TXRDataManager_V2>
     {
         #region fields and properties
@@ -61,8 +101,24 @@ namespace TXRData
         public event Action<ContinuousSample> OnContinuousSample; // Fired once per physics tick, right before writing ContinuousData csv
         public event Action<FaceExpressionSample> OnFaceExpressionSample; // Fired once per physics tick, right before writing FaceExpressions csv
 
+        // declare pointers for all experience-specific analytics classes
+        private TXRLogs logLine;
 
         #endregion
+
+        public void LogLineToFile(string line)
+        {
+            // creates a new instance of AnalyticsLogLine data class. In it's constructor, it gets the line and automatically assign Time.time to the log time.
+            logLine = new TXRLogs(Time.realtimeSinceStartup, line);
+            // pass the data class instance to CustomCsvFromDataClass.Write to write it to file.
+            this.LogCustom(logLine);
+        }
+
+        #region project specific analitics reportes
+
+        #endregion
+
+
 
         #region unity lifecycle
         // Change the method declaration to override the base class implementation
@@ -285,6 +341,12 @@ namespace TXRData
         #endregion
 
         public string GetOutputDirectory() => _rootDir;
+
+        #region default data class logging
+
+
+
+        #endregion
 
         #region METADATA
 
