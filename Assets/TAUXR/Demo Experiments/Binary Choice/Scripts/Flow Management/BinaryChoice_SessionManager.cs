@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
-public class SessionManager : TXRSingleton<SessionManager>
+
+public class BinaryChoice_SessionManager : TXRSingleton<SessionManager>
 {
     [SerializeField] private BinaryChoice_Round[] _rounds;
     private int _currentRound;
@@ -30,31 +32,18 @@ public class SessionManager : TXRSingleton<SessionManager>
     private void StartSession()
     {
         // setup session initial conditions.
-        Debug.Log("Session Started");
-
-        // Load rounds from configuration
-        LoadRoundsFromConfig();
-
-        // Log experiment settings
-        Debug.Log($"Total Rounds: {_rounds.Length}\n" +
-                  $"Experiment settings:\n" +
-                  $"Time between stimuli: {BinaryChoice_SceneReferencer.Instance.SecondsBetweenStimuli}");
     }
 
 
     private void EndSession()
     {
         // setup end session conditions
-        Debug.Log("Session Ended");
     }
 
     private async UniTask BetweenRoundsFlow()
     {
         await UniTask.Yield();
-    }
 
-    private void LoadRoundsFromConfig()
-    {
-        _rounds = BinaryChoice_RoundsConfiguration.Instance.rounds;
+        throw new NotImplementedException();
     }
 }
