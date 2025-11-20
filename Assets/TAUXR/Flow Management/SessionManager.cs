@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class SessionManager : TXRSingleton<SessionManager>
 {
-    [SerializeField] private BinaryChoice_Round[] _rounds;
+    private BinaryChoice_Round[] _rounds;
     private int _currentRound;
+
+    private InstructionsPanel generalInstructions;
+    private float instructionsDisplayTime;
+
+
 
     //If there is a higher level flow manager, remove this and use his start method
     private void Start()
@@ -15,6 +20,8 @@ public class SessionManager : TXRSingleton<SessionManager>
     public async UniTask RunSessionFlow()
     {
         StartSession();
+
+        await generalInstructions.ShowForSeconds(instructionsDisplayTime);
 
         while (_currentRound < _rounds.Length)
         {
@@ -30,15 +37,22 @@ public class SessionManager : TXRSingleton<SessionManager>
     private void StartSession()
     {
         // setup session initial conditions.
-        Debug.Log("Session Started");
-
-        // Load rounds from configuration
         LoadRoundsFromConfig();
+        InitializeReferences();
 
         // Log experiment settings
         Debug.Log($"Total Rounds: {_rounds.Length}\n" +
                   $"Experiment settings:\n" +
                   $"Time between stimuli: {BinaryChoice_SceneReferencer.Instance.SecondsBetweenStimuli}");
+
+        Debug.Log("Session Started");
+
+    }
+
+    private void InitializeReferences()
+    {
+        generalInstructions = BinaryChoice_SceneReferencer.Instance.generalInstructions;
+        instructionsDisplayTime = BinaryChoice_SceneReferencer.Instance.instructionsDisplayTime;
     }
 
 

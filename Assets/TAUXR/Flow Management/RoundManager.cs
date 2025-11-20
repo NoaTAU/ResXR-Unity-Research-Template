@@ -9,14 +9,15 @@ public class RoundManager : TXRSingleton<RoundManager>
     private BinaryChoice_Round _currentRound;
 
     private StimuliPairsDispatcher _stimuliPairsDispatcher;
-    private FixationCross _fixationCross;
     private float _timeBetweenStimuli;
-
+    private float _instructionsDisplayTime;
 
     public async UniTask RunRoundFlow(BinaryChoice_Round round)
     {
         _currentRound = round;
         StartRound();
+
+        await _currentRound.roundInstructions.ShowForSeconds(_instructionsDisplayTime);
 
         while (_currentTrial < _trials.Length)
         {
@@ -31,18 +32,18 @@ public class RoundManager : TXRSingleton<RoundManager>
     private void StartRound()
     {
         // initialize variables
-        _fixationCross = BinaryChoice_SceneReferencer.Instance.fixationCross;
         _stimuliPairsDispatcher = new StimuliPairsDispatcher(_currentRound.stimuliFolderPath, _currentRound.stimuliOrder);
         _timeBetweenStimuli = BinaryChoice_SceneReferencer.Instance.SecondsBetweenStimuli;
+        _instructionsDisplayTime = BinaryChoice_SceneReferencer.Instance.instructionsDisplayTime;
 
         CreateTrials();
 
-        Debug.Log($"Round {_currentRound.roundName} Started");
+        Debug.Log($"[RoundManager] Round {_currentRound.roundName} Started");
     }
 
     private void EndRound()
     {
-        Debug.Log($"Round {_currentRound.roundName} Ended");
+        Debug.Log($"[RoundManager] Round {_currentRound.roundName} Ended");
     }
 
     private async UniTask BetweenTrialsFlow()

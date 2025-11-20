@@ -7,11 +7,10 @@ public class BinaryChoice_SceneReferencer : TXRSingleton<BinaryChoice_SceneRefer
 
     [Header("Configurations")]
     public float SecondsBetweenStimuli = 0.5f;
+    public float instructionsDisplayTime = 3f;
 
     [Header("Objects")]
     public FixationCross fixationCross;
     public ChoicesManager choicesManager;
-
-
-
+    public InstructionsPanel generalInstructions;
 }

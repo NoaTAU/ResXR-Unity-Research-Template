@@ -14,7 +14,7 @@ public class BinaryChoice_Round
     [InfoBox("Change this field to your desired folder. Stimuli images should be set single sprites in unity import settings, and must be located under a 'Resources' folder to be retrievable on runtime.")]
     public string stimuliFolderPath = "BinaryChoice/StimuliPairs";
 
-
+    public InstructionsPanel roundInstructions;
 }
 
 public enum StimuliOrder
