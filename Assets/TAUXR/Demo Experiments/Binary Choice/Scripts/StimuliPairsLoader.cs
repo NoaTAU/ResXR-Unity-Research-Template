@@ -3,13 +3,14 @@ using System.Linq;
 using UnityEngine;
 
 
-public class StimuliPairsDispatcher
+public class StimuliPairsLoader
 {
 
+    private List<StimuliPair> stimuliPairs = new List<StimuliPair>();
+    private int currentPairIndex = 0;
 
-    private Queue<StimuliPair> stimuliPairs = new Queue<StimuliPair>();
-
-    public StimuliPairsDispatcher(string folderPath, StimuliOrder order)
+    #region constructor and initialization
+    public StimuliPairsLoader(string folderPath, StimuliOrder order)
     {
         LoadPairs(folderPath, order);
     }
@@ -51,21 +52,30 @@ public class StimuliPairsDispatcher
         for (int i = 0; i < sprites.Count - 1; i += 2)
         {
             StimuliPair pair = new StimuliPair(sprites[i], sprites[i + 1]);
-            stimuliPairs.Enqueue(pair);
+            stimuliPairs.Add(pair);
         }
 
         Debug.Log($"[StimuliPairsDispatcher] Created {stimuliPairs.Count} stimuli pairs from {sprites.Count} sprites.");
     }
+    #endregion
+
+    #region public methods
+    public List<StimuliPair> GetAllPairs()
+    {
+        return stimuliPairs;
+    }
 
     public bool HasMorePairs()
     {
-        return stimuliPairs.Count > 0;
+        return currentPairIndex < stimuliPairs.Count;
     }
 
     public StimuliPair GetNextPair()
     {
-        return stimuliPairs.Dequeue();
+        return stimuliPairs[currentPairIndex++];
     }
+
+    #endregion
 }
 
 
