@@ -12,5 +12,6 @@ public class BinaryChoice_SceneReferencer : TXRSingleton<BinaryChoice_SceneRefer
     [Header("Objects")]
     public FixationCross fixationCross;
     public ChoicesManager choicesManager;
-    public InstructionsPanel generalInstructions;
+    public InstructionsPanelWithConfirmation generalInstructions;
+    public InstructionsPanel endInstructions;
 }

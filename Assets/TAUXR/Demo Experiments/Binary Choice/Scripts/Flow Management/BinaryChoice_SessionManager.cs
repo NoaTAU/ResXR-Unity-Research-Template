@@ -7,7 +7,8 @@ public class BinaryChoice_SessionManager : TXRSingleton<BinaryChoice_SessionMana
     private BinaryChoice_Round[] _rounds;
     private int _currentRound;
 
-    private InstructionsPanel generalInstructions;
+    private InstructionsPanelWithConfirmation generalInstructions;
+    private InstructionsPanel endInstructions;
     private float instructionsDisplayTime;
 
 
@@ -22,7 +23,7 @@ public class BinaryChoice_SessionManager : TXRSingleton<BinaryChoice_SessionMana
     {
         StartSession();
 
-        await generalInstructions.ShowForSeconds(instructionsDisplayTime);
+        await generalInstructions.ShowAndWaitForConfirmation();
 
         while (_currentRound < _rounds.Length)
         {
@@ -32,6 +33,7 @@ public class BinaryChoice_SessionManager : TXRSingleton<BinaryChoice_SessionMana
             _currentRound++;
         }
 
+        await endInstructions.ShowForSeconds(instructionsDisplayTime);
         EndSession();
     }
 
@@ -55,6 +57,7 @@ public class BinaryChoice_SessionManager : TXRSingleton<BinaryChoice_SessionMana
     {
         generalInstructions = BinaryChoice_SceneReferencer.Instance.generalInstructions;
         instructionsDisplayTime = BinaryChoice_SceneReferencer.Instance.instructionsDisplayTime;
+        endInstructions = BinaryChoice_SceneReferencer.Instance.endInstructions;
     }
 
 

@@ -18,7 +18,7 @@ public class InstructionsPanel : MonoBehaviour
     private Vector3 initialScale;
     private Collider eyeGazeCollider;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         initialScale = transform.localScale;
 
@@ -42,7 +42,7 @@ public class InstructionsPanel : MonoBehaviour
 
     }
 
-    public async UniTask Show()
+    public virtual async UniTask Show()
     {
         if (useAnimations)
         {
@@ -55,7 +55,7 @@ public class InstructionsPanel : MonoBehaviour
         Debug.Log($"[InstructionsPanel] {gameObject.name} was shown.");
     }
 
-    public async UniTask Hide()
+    public virtual async UniTask Hide()
     {
         if (useAnimations)
         {
@@ -76,14 +76,14 @@ public class InstructionsPanel : MonoBehaviour
         await Hide();
     }
 
-    private void ShowInstant()
+    protected virtual void ShowInstant()
     {
         backPanel.SetActive(true);
         title.gameObject.SetActive(true);
         text.gameObject.SetActive(true);
     }
 
-    private void HideInstant()
+    protected virtual void HideInstant()
     {
         backPanel.SetActive(false);
         title.gameObject.SetActive(false);
