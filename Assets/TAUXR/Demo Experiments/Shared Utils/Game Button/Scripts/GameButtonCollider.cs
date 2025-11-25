@@ -31,7 +31,7 @@ public class GameButtonCollider : MonoBehaviour
         {
             if (_touchCount == 0)
             {
-                onPress.Invoke();
+                onPress?.Invoke();
                 _acceptingInput = false;
             }
             _touchCount += 1;
@@ -46,7 +46,7 @@ public class GameButtonCollider : MonoBehaviour
             _touchCount -= 1;
             if (_touchCount == 0)
             {
-                onRelease.Invoke();
+                onRelease?.Invoke();
             }
         }
     }
