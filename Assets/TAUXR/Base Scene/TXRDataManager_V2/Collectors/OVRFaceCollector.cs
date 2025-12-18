@@ -106,8 +106,8 @@ namespace TXRData
             // Region confidences (two values: Upper = [0], Lower = [1])
             if (face.ExpressionWeightConfidences != null && face.ExpressionWeightConfidences.Length >= 2)
             {
-                SetIfValid(row, _idxRegionUpper, face.ExpressionWeightConfidences[0]);
-                SetIfValid(row, _idxRegionLower, face.ExpressionWeightConfidences[1]);
+                SetIfValid(row, _idxRegionLower , face.ExpressionWeightConfidences[0]);
+                SetIfValid(row,  _idxRegionUpper, face.ExpressionWeightConfidences[1]);
             }
         }
 

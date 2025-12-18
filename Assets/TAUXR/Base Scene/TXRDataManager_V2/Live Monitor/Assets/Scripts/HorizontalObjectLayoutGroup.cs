@@ -27,9 +27,6 @@ public class HorizontalObjectLayoutGroup : MonoBehaviour
     private HorizontalObjectLayoutGroupMember[] groupMembers;
 
 
-    private string LOG_COLOR = "#6dcdee";
-
-
 
     public void UpdateLayout()
     {

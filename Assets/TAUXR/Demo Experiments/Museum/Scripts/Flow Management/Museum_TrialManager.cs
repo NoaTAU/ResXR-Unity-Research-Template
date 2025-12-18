@@ -1,12 +1,12 @@
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
-public class TrialManager : TXRSingleton<TrialManager>
+public class Museum_TrialManager : TXRSingleton<Museum_TrialManager>
 {
-    private Trial _currentTrial;
+    private Museum_Trial _currentTrial;
 
-    public async UniTask RunTrialFlow(Trial trial)
+    public async UniTask RunTrialFlow(Museum_Trial trial)
     {
-        _currentTrial = trial;
         StartTrial();
 
         // all trial flow. Activating and waiting for project specific functionalities.

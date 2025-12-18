@@ -8,12 +8,12 @@ public class InstructionsPanel : MonoBehaviour
     public GameObject backPanel;
     public TextMeshPro title;
     public TextMeshPro text;
+    public TMPBackPanelResizer backPanelResizer;
 
     [Header("settings")]
     public bool hideOnAwake = true;
     public bool useAnimations = true;
     public bool collectEyeGaze = true;
-
 
     private Vector3 initialScale;
     private Collider eyeGazeCollider;
@@ -42,8 +42,13 @@ public class InstructionsPanel : MonoBehaviour
 
     }
 
-    public virtual async UniTask Show()
+    public virtual async UniTask Show(bool doResizeBackPanel = true)
     {
+        if (doResizeBackPanel)
+        {
+            backPanelResizer.ResizeBackPanel();
+        }
+        
         if (useAnimations)
         {
             await AnimateShow();
@@ -52,6 +57,8 @@ public class InstructionsPanel : MonoBehaviour
         {
             ShowInstant();
         }
+
+
         Debug.Log($"[InstructionsPanel] {gameObject.name} was shown.");
     }
 
@@ -69,9 +76,9 @@ public class InstructionsPanel : MonoBehaviour
     }
 
 
-    public async UniTask ShowForSeconds(float seconds)
+    public async UniTask ShowForSeconds(float seconds, bool doResizeBackPanel = true)
     {
-        await Show();
+        await Show(doResizeBackPanel);
         await UniTask.Delay(System.TimeSpan.FromSeconds(seconds));
         await Hide();
     }
