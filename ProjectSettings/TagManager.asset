@@ -25,6 +25,7 @@ TagManager:
   - QDSUIBackplateGradient
   - QDSUISection
   - QDSUITextInputField
+  - SamplesInfoPanel
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - IgnoreEyeTracking
   - 
   - 
   - 
