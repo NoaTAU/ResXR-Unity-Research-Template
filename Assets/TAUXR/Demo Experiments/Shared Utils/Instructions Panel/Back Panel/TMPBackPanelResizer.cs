@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System;
+
 
 #if UNITY_EDITOR
 using NaughtyAttributes;
@@ -176,5 +178,10 @@ public class TMPBackPanelResizer : MonoBehaviour
     private void DrawBoxEdge(int a, int b, Vector3[] corners)
     {
         Gizmos.DrawLine(corners[a], corners[b]);
+    }
+
+    internal void RegisterTextComponent(TextMeshPro textComp)
+    {
+        tmps.Add(textComp);
     }
 }

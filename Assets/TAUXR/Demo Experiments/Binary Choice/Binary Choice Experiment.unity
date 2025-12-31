@@ -704,7 +704,7 @@ PrefabInstance:
     - target: {fileID: 3918632266462530285, guid: 06e21c85d29e7ab45a77214e0c3eabc8, type: 3}
       propertyPath: m_renderer
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 982123013}
     - target: {fileID: 8033130150133020238, guid: 06e21c85d29e7ab45a77214e0c3eabc8, type: 3}
       propertyPath: m_text
       value: Binary Choice Experiment
@@ -712,7 +712,7 @@ PrefabInstance:
     - target: {fileID: 8033130150133020238, guid: 06e21c85d29e7ab45a77214e0c3eabc8, type: 3}
       propertyPath: m_renderer
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 982123014}
     - target: {fileID: 8413339966348445363, guid: 06e21c85d29e7ab45a77214e0c3eabc8, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
@@ -759,6 +759,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18550493c8279464d9501282294dff42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!23 &982123013 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8576966611494058513, guid: 06e21c85d29e7ab45a77214e0c3eabc8, type: 3}
+  m_PrefabInstance: {fileID: 982123010}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &982123014 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4020940085583733615, guid: 06e21c85d29e7ab45a77214e0c3eabc8, type: 3}
+  m_PrefabInstance: {fileID: 982123010}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1492274474
 GameObject:
   m_ObjectHideFlags: 0
@@ -1179,6 +1189,10 @@ PrefabInstance:
     - target: {fileID: 6400942834339489157, guid: 7fab0fbaba0062c4a9a0b41a1d1ab0e5, type: 3}
       propertyPath: m_Name
       value: Choices Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400942834339489157, guid: 7fab0fbaba0062c4a9a0b41a1d1ab0e5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6831576217896463571, guid: 7fab0fbaba0062c4a9a0b41a1d1ab0e5, type: 3}
       propertyPath: m_Sprite

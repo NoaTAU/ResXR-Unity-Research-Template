@@ -552,6 +552,8 @@ GameObject:
   - component: {fileID: 70571674587285486}
   - component: {fileID: 8387027752278182757}
   - component: {fileID: 3641531044851627321}
+  - component: {fileID: 3083522399853017895}
+  - component: {fileID: 3401409587777827913}
   m_Layer: 0
   m_Name: Back
   m_TagString: Untagged
@@ -568,7 +570,7 @@ Transform:
   m_GameObject: {fileID: 9088907742428898788}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.049, z: 0.03}
+  m_LocalPosition: {x: 0, y: 0.048999995, z: 0.03}
   m_LocalScale: {x: 0.68, y: 0.53625, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -605,7 +607,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b60fe0100d0434948a63beb40cff780e, type: 2}
+  - {fileID: 2100000, guid: ea199ec3b814ea042a2257cb05cab7ec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -649,6 +651,37 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &3083522399853017895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9088907742428898788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f38de661731e5d4aa53618cbe79cf98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tmps:
+  - {fileID: 0}
+  backPanel: {fileID: 6465171266981588289}
+  padding: {x: 0.2, y: 0.2}
+  resizeOnAwake: 0
+  resizeEveryFrame: 0
+--- !u!114 &3401409587777827913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9088907742428898788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e639b7fc6d83ac45861d5b53b5157ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textParent: {fileID: 7444155795796910120}
 --- !u!1001 &3513883084051389350
 PrefabInstance:
   m_ObjectHideFlags: 0
