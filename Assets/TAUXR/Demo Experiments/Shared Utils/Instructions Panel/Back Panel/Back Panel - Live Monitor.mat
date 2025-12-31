@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Back Panel Variant
+  m_Name: Back Panel - Live Monitor
   m_Shader: {fileID: -6465566751694194690, guid: 52b497637497f6d4aaabfe4d414e796f, type: 3}
   m_Parent: {fileID: 2100000, guid: 4abf82e0898c61b49874beb007451537, type: 2}
   m_ModifiedSerializedProperties: 0
