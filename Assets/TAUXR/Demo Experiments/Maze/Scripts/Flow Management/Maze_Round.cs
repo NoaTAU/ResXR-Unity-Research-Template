@@ -1,16 +1,7 @@
 using UnityEngine;
 
-public class Maze_Round : MonoBehaviour
+[System.Serializable]
+public class Maze_Round 
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int numOfTrials = 5;
 }

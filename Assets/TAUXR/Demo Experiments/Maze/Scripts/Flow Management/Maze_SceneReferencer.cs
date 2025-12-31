@@ -1,16 +1,17 @@
 using UnityEngine;
 
-public class Maze_SceneReferencer : MonoBehaviour
+public class Maze_SceneReferencer : TXRSingleton<Maze_SceneReferencer>
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("References")]
+    public PlayerPositionMark startingPositionMark;
+    public InstructionsPanelWithConfirmation generalInstructions;
+    public InstructionsPanel endInstructions;
+    public InstructionsPanel trialStartPanel;
+    public Coin coin;
+    public Maze maze;
+
+    [Header("Settings")]
+    public float trialNumberPanelVisibleDuration = 3f;
+
 }

@@ -12,15 +12,26 @@ public class GameButton : MonoBehaviour
     [SerializeField]
     private GameButtonCollider buttonCollider;
 
+    
+    
+    
     [Header("Settings and public events")]
     public UnityEvent onPress;
     public UnityEvent onRelease;
     public bool showDebugLogs = false;
     public bool useSound = true;
+    [Tooltip("If true, the button is continuely interactable, if false it's pressable only when 'WaitForButtonPress' is called.")]
+    public bool alwaysPressable = false;
 
     private Vector3 _origPosition;
     private AudioSource clickSound;
-    private UniTaskCompletionSource press_tcs;
+
+    private bool _isWaitingForPress = false;
+    private UniTaskCompletionSource<bool> _waitTcs;
+    private bool _pressAccepted = false;
+
+
+
 
     private void Start()
     {
@@ -35,13 +46,28 @@ public class GameButton : MonoBehaviour
             }
         }
 
+        if (buttonCollider == null)
+        {
+            Debug.LogError($"[GameButton] {gameObject.name}: buttonCollider reference is not set in the inspector.");
+        }
+
     }
 
 
 
     public virtual void whenPressed()
     {
-        press_tcs?.TrySetResult();
+        if (!alwaysPressable && !_isWaitingForPress)
+            return;
+
+        _pressAccepted = true;
+
+        if (_isWaitingForPress)
+        {
+            _waitTcs?.TrySetResult(true);
+            _isWaitingForPress = false;
+        }
+
         onPress.Invoke();
 
         press.transform.localPosition = new Vector3(0, 0.003f, 0);
@@ -57,6 +83,11 @@ public class GameButton : MonoBehaviour
 
     public virtual void whenReleased()
     {
+        if (!_pressAccepted)
+            return;
+
+        _pressAccepted = false;
+
         press.transform.localPosition = _origPosition;
         onRelease.Invoke();
 
@@ -68,13 +99,23 @@ public class GameButton : MonoBehaviour
 
     public async UniTask WaitForButtonPress()
     {
-        press_tcs = new UniTaskCompletionSource();
+        _isWaitingForPress = true;
+        _waitTcs = new UniTaskCompletionSource<bool>();
+        await _waitTcs.Task;
 
-        buttonCollider.onPress += whenPressed;
-
-        await press_tcs.Task;
-
-        buttonCollider.onPress -= whenPressed;
     }
+
+    private void OnEnable()
+    {
+        buttonCollider.onPress += whenPressed;
+        buttonCollider.onRelease += whenReleased;
+    }
+
+    private void OnDisable()
+    {
+        buttonCollider.onPress -= whenPressed;
+        buttonCollider.onRelease -= whenReleased;
+    }
+
 
 }

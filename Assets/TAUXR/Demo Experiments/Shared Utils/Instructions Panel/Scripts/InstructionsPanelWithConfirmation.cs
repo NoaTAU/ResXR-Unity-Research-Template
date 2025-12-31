@@ -42,4 +42,6 @@ public class InstructionsPanelWithConfirmation : InstructionsPanel
         Debug.Log($"[InstructionsPanelWithConfirmation] {gameObject.name} confirmed by user.");
         await Hide();
     }
+
+
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameButtonCollider : MonoBehaviour
 {
 
-    public bool alwaysPressable = false;
     public event Action onPress;
     public event Action onRelease;
 
@@ -13,7 +12,6 @@ public class GameButtonCollider : MonoBehaviour
 
     // touch counter to avoid detecting multiple fingers as different presses
     private int _touchCount = 0;
-    private bool _acceptingInput = true;
 
 
     private void Awake()
@@ -23,16 +21,13 @@ public class GameButtonCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!_acceptingInput && !alwaysPressable)
-        {
-            return;
-        }
+        
         if (other.gameObject.tag == "Toucher")
         {
             if (_touchCount == 0)
             {
                 onPress?.Invoke();
-                _acceptingInput = false;
+                
             }
             _touchCount += 1;
         }

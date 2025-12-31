@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: dots line
-  m_Shader: {fileID: -6465566751694194690, guid: 203438c143e533445817c6f41557cdb9, type: 3}
+  m_Name: Dotted Line
+  m_Shader: {fileID: -6465566751694194690, guid: e1812a50abb143748901ae504689bd5f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -137,6 +137,8 @@ Material:
     - _BaseColor: {r: 0.5960751, g: 0.8962264, b: 0.6555379, a: 1}
     - _Color: {r: 0.92549026, g: 0.5176471, b: 0.47450984, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _Tiling: {r: 1, g: 45.31, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

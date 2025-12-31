@@ -36,7 +36,7 @@ public class PlayerPositionMark : MonoBehaviour
 
     private void HandlePlayerEnter(GameObject player)
     {
-        Debug.Log("Player entered position marker");
+        Debug.Log("[PlayerPositionMark] Player entered position marker");
         playerInside = true;
 
         visualMark.SetActive(false);
@@ -48,6 +48,8 @@ public class PlayerPositionMark : MonoBehaviour
         {
             await TXRPlayer.Instance.FadeViewToColor(Color.black, 0.0f);
         }
+
+        Debug.Log("[PlayerPositionMark] Waiting for player to enter position marker...");
 
         await UniTask.WaitUntil(() => playerInside, cancellationToken: cancellationToken);
 
