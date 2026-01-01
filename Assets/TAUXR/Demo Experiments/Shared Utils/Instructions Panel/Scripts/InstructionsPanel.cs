@@ -76,6 +76,16 @@ public class InstructionsPanel : MonoBehaviour
     }
 
 
+    public void SetTitle(string newTitle)
+    {
+        title.text = newTitle;
+    }
+
+    public void SetText(string newText)
+    {
+        text.text = newText;
+    }
+
     public async UniTask ShowForSeconds(float seconds, bool doResizeBackPanel = true)
     {
         await Show(doResizeBackPanel);

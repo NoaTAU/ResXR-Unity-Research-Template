@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class PlayerPositionMark : MonoBehaviour
 {
+    [Header("references")]
     public GameObject visualMark;
+    public InstructionsPanel instructionsPanel;
+
+    [Header("settings")]
+    public float fadeInDuration = 1f;
+
+
     private PositionMarkTriggerZone triggerZone;
     private bool playerInside = false;
-    public float fadeInDuration = 1f;
+    
+    
 
     private void Awake()
     {
@@ -39,8 +47,21 @@ public class PlayerPositionMark : MonoBehaviour
         Debug.Log("[PlayerPositionMark] Player entered position marker");
         playerInside = true;
 
-        visualMark.SetActive(false);
+
+
     }
+
+    private void Show()
+    {
+
+    }
+
+    private void Hide()
+    {
+        visualMark.SetActive(false);
+        instructionsPanel.Hide();
+    }
+
 
     public async UniTask WaitForPlayerAsync(bool fadeToblack = true, CancellationToken cancellationToken = default)
     {
