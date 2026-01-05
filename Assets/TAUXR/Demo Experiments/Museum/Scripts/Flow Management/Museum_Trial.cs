@@ -1,6 +1,8 @@
 using UnityEngine;
 
+[System.Serializable]
 public class Museum_Trial 
 {
-    // holds trial specific configurations.
+    public Museum_RoundType trialType;
+    public float _trialDurationInSeconds;
 }

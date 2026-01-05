@@ -10,7 +10,7 @@ public class PlayerPositionMark : MonoBehaviour
 
     [Header("settings")]
     public float fadeInDuration = 1f;
-
+    public bool hideOnAwake = false;
 
     private PositionMarkTriggerZone triggerZone;
     private bool playerInside = false;
@@ -23,6 +23,11 @@ public class PlayerPositionMark : MonoBehaviour
         if (triggerZone == null)
         {
             Debug.LogError("PositionMarkTriggerZone not found in children.");
+        }
+
+        if (hideOnAwake)
+        {
+            Hide();
         }
     }
 
@@ -53,18 +58,27 @@ public class PlayerPositionMark : MonoBehaviour
 
     private void Show()
     {
-
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+        instructionsPanel.Show().Forget();
     }
 
     private void Hide()
     {
-        visualMark.SetActive(false);
-        instructionsPanel.Hide();
+        instructionsPanel.Hide().Forget();
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 
 
     public async UniTask WaitForPlayerAsync(bool fadeToblack = true, CancellationToken cancellationToken = default)
     {
+        Show();
+
         if (fadeToblack)
         {
             await TXRPlayer.Instance.FadeViewToColor(Color.black, 0.0f);
@@ -78,6 +92,8 @@ public class PlayerPositionMark : MonoBehaviour
         {
             await TXRPlayer.Instance.FadeViewToColor(Color.clear, fadeInDuration);
         }
+        
+        Hide();
 
     }
 }

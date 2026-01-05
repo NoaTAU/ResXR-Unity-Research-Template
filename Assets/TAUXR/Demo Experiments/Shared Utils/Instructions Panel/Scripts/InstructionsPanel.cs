@@ -44,11 +44,25 @@ public class InstructionsPanel : MonoBehaviour
 
     public virtual async UniTask Show(bool doResizeBackPanel = true)
     {
+        // Ensure geometry exists and active BEFORE measuring (else TMP may not update correctly)
+        ShowInstant();
+
         if (doResizeBackPanel)
         {
+            // Make sure we're not at zero scale while measuring (animation may have set it to zero)
+            Vector3 prevScale = transform.localScale;
+            transform.localScale = initialScale;
+
+            // Let TMP update once (helps in some cases)
+            await UniTask.Yield();
+            title.ForceMeshUpdate();
+            text.ForceMeshUpdate();
+
             backPanelResizer.ResizeBackPanel();
+
+            transform.localScale = prevScale;
         }
-        
+
         if (useAnimations)
         {
             await AnimateShow();

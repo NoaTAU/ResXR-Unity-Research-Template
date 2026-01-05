@@ -34,9 +34,9 @@ public class InstructionsPanelWithConfirmation : InstructionsPanel
         confirmButton.gameObject.SetActive(false);
     }
 
-    public async UniTask ShowAndWaitForConfirmation()
+    public async UniTask ShowAndWaitForConfirmation(bool doResizeBackPanel = true)
     {
-        await Show();
+        await Show(doResizeBackPanel);
         await confirmButton.WaitForButtonPress();
 
         Debug.Log($"[InstructionsPanelWithConfirmation] {gameObject.name} confirmed by user.");

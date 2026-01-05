@@ -12,6 +12,7 @@
   <Project Path="Meta.Voice.VSDKHub.Editor.csproj" />
   <Project Path="Meta.XR.BuildingBlocks.Editor.csproj" />
   <Project Path="Unity.Collections.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Oculus.Platform.csproj" />
   <Project Path="NaughtyAttributes.Core.csproj" />
   <Project Path="Unity.VisualScripting.Core.Editor.csproj" />
@@ -49,7 +50,6 @@
   <Project Path="Unity.TestTools.CodeCoverage.Editor.csproj" />
   <Project Path="Unity.Burst.CodeGen.csproj" />
   <Project Path="Unity.VisualScripting.Flow.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.csproj" />
   <Project Path="VoiceSDK.Runtime.csproj" />

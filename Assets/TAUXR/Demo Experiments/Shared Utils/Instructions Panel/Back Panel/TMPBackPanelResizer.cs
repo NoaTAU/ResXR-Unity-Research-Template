@@ -12,7 +12,7 @@ using NaughtyAttributes;
 /// Resizes a background mesh (e.g., Quad) to match the combined bounds of one or more 3D TextMeshPro components.
 /// Also draws gizmos showing the detected bounds.
 /// </summary>
-[ExecuteAlways]
+
 public class TMPBackPanelResizer : MonoBehaviour
 {
     [Header("References")]

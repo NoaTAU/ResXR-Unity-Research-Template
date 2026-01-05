@@ -33,6 +33,9 @@ public class Slider : MonoBehaviour
     public bool AllowContinuousValues = false;
 
     [SerializeField] private bool hideOnAwake = false;
+    [Tooltip("If true, the user must touch/move the slider before being able to confirm the value.")]
+    [SerializeField] private bool requireSliderTouchBeforeConfirm = false;
+    private bool _hasBeenTouched = false;
 
     [Header("References")]
     [SerializeField] private SimpleButton confirmButton;
@@ -59,6 +62,7 @@ public class Slider : MonoBehaviour
     private Vector3 _prevMinPos;
     private Vector3 _prevMaxPos;
     private const float _posEpsilonSqr = 1e-8f;
+    private float initialValue;
 
     private UniTaskCompletionSource tcs;
 
@@ -99,6 +103,23 @@ public class Slider : MonoBehaviour
         {
             stepMarkParent = transform; // Use the slider's transform if no parent is assigned
         }
+
+        initialValue = CurrentValue;
+
+        if (requireSliderTouchBeforeConfirm)
+        {
+            if (confirmButton == null)
+                Debug.LogError("[Slider] requireSliderTouchBeforeConfirm is enabled but confirmButton is not assigned.");
+
+            confirmButton.SetButtonEnabled(false);
+            _hasBeenTouched = false;
+        }
+        else
+        {
+            // optional: if you want confirm always enabled when rule is off
+            confirmButton?.SetButtonEnabled(true);
+        }
+
     }
 
     private void Update()
@@ -324,7 +345,7 @@ public class Slider : MonoBehaviour
         }
     }
 
-    public void DrawLine()
+    private void DrawLine()
     {
         lineRenderer.positionCount = 2;
         if (minPoint != null && maxPoint != null)
@@ -338,7 +359,7 @@ public class Slider : MonoBehaviour
         }
     }
 
-    public void UpdateCollider()
+    private void UpdateCollider()
     {
         if (lineCollider == null || minPoint == null || maxPoint == null || lineRenderer == null)
             return;
@@ -380,8 +401,6 @@ public class Slider : MonoBehaviour
         lineCollider.center = Vector3.zero;
         lineCollider.size = new Vector3(localLen, localHeight, localDepth);
     }
-
-
 
 
     private void UpdateValueMark()
@@ -436,6 +455,11 @@ public class Slider : MonoBehaviour
         Vector3 closestPoint = GetClosestPointOnSegment(worldPos);
         float t = GetTOnSegment(closestPoint);
         ApplyFromNormalized(t);
+        if (requireSliderTouchBeforeConfirm && !_hasBeenTouched)
+        {
+            _hasBeenTouched = true;
+            confirmButton.SetButtonEnabled(true);
+        }
         sliderWasTouched?.Invoke();
     }
     #endregion
@@ -459,10 +483,6 @@ public class Slider : MonoBehaviour
         return CurrentValue;
     }
 
-    public void OnConfirmPressed()
-    {
-        tcs.TrySetResult();
-    }
 
     public async UniTask CancelWait()
     {
@@ -471,9 +491,24 @@ public class Slider : MonoBehaviour
             tcs.TrySetCanceled();
     }
 
+    public void ResetValue()
+    {
+        SetValue(initialValue);
+        if (requireSliderTouchBeforeConfirm)
+        {
+            _hasBeenTouched = false;
+            confirmButton.SetButtonEnabled(false);
+        }
+    }
+
     #endregion
 
     #region helpers
+
+    private void OnConfirmPressed()
+    {
+        tcs.TrySetResult();
+    }
 
     private float SnapToStep(float v)
     {
