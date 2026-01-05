@@ -316,8 +316,12 @@ PrefabInstance:
       value: Trial #1
       objectReference: {fileID: 0}
     - target: {fileID: 1724395971502678047, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724395971502678047, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0228
+      value: -0.0175
       objectReference: {fileID: 0}
     - target: {fileID: 3225062827319105566, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: padding.x
@@ -333,7 +337,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3858714977916647784, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.19353707
+      value: 0.1891373
       objectReference: {fileID: 0}
     - target: {fileID: 3858714977916647784, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_LocalPosition.x
@@ -341,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3858714977916647784, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.021931529
+      value: -0.03953147
       objectReference: {fileID: 0}
     - target: {fileID: 4968504091892824129, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_Name
@@ -350,6 +354,10 @@ PrefabInstance:
     - target: {fileID: 6146779796964764737, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_text
       value: Find the coin and grab it!
+      objectReference: {fileID: 0}
+    - target: {fileID: 6146779796964764737, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
+      propertyPath: m_margin.w
+      value: 0.3644112
       objectReference: {fileID: 0}
     - target: {fileID: 7135081095578142390, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_SizeDelta.x
@@ -360,8 +368,12 @@ PrefabInstance:
       value: 0.48
       objectReference: {fileID: 0}
     - target: {fileID: 7135081095578142390, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135081095578142390, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.07869996
+      value: -0.1146
       objectReference: {fileID: 0}
     - target: {fileID: 7346690161242058031, guid: e2500d4c8234abe4b9dae60411b8a714, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1481,20 +1493,8 @@ PrefabInstance:
       value: Coin
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.00004000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.000040000006
-      objectReference: {fileID: 0}
-    - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.00004000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0076
+      value: -0.00752
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1506,35 +1506,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3604561942433220499, guid: b66936dc6c045c442a583b3f82743339, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4909123912252758259, guid: b66936dc6c045c442a583b3f82743339, type: 3}
-      propertyPath: m_Name
-      value: Coin Collider
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

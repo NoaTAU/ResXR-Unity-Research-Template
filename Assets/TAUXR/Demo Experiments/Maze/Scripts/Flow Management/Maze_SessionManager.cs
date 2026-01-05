@@ -56,7 +56,7 @@ public class Maze_SessionManager : TXRSingleton<Maze_SessionManager>
     {
         await UniTask.Yield();
 
-        throw new NotImplementedException();
+        
     }
 
     private void InitReferences()

@@ -66,6 +66,7 @@ public class Coin : MonoBehaviour
 
     public Task WaitForCoinPickup()
     {
+        _animator.SetTrigger("Activated");
         _coinPickupTcs = new TaskCompletionSource<bool>();
         return _coinPickupTcs.Task;
     }

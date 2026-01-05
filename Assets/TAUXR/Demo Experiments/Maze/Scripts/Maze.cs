@@ -13,9 +13,10 @@ public class Maze : MonoBehaviour
 
     public void Rotate180Degrees()
     {
-
-        transform.rotation = transform.rotation * Quaternion.Euler(0, math.radians(180f), 0);
         isRotated = !isRotated;
+        transform.rotation = Quaternion.AngleAxis(isRotated ? 180f : 0f, Vector3.up) * originalOrientation;
     }
+
+
 
 }
