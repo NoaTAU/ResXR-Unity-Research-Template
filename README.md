@@ -13,8 +13,6 @@ ResXR is a complete framework for building VR research applications on Meta Ques
 - **Face Expression Tracking** - Face expression weights and validity tracking
 - **Comprehensive Data Collection** - Automatic CSV export of all tracking data
 - **Scene Management** - Additive scene loading with smooth transitions
-- **Room-Scale Calibration** - Align virtual environment with physical space
-- **Multiple Interaction Paradigms** - Pinching, controllers, and touch interactions
 
 ## 🧠 Core Philosophy: "Clear Box" Design
 
@@ -69,7 +67,7 @@ See the [Installation](#-installation) section for detailed instructions.
 3. Rename it to your experiment name
 4. Add it to Build Settings (after Base Scene)
 5. **Important**: The Base Scene must be opened **with** your experiment scene additively. The Base Scene contains the player (`ResXRPlayer`) and data manager (`ResXRDataManager_V2`) which run continuously throughout your experiment, even when scenes are changed. Your experiment scene will be loaded additively on top of the Base Scene.
-6. Modify the `SceneReferencer` script to add your experiment references
+6. Modify the `SceneReferencer` and flow management (SessionManager, RoundManager, TrialManager) scripts to add your experiment references
 7. Build and run!
 
 ## 📦 Installation
@@ -118,7 +116,6 @@ Assets/ResXR/
 ├── Utilities/              # Helper scripts and utilities
 │   ├── EditorUtilities/    # Editor tools and installation checker
 │   ├── General Scripts/    # Singleton, utilities, extensions
-│   └── JuiceAnimations/   # Optional visual feedback animations (hover, scale, shake, rotate) - not used in demos
 ├── Detectors/              # Interaction detection system
 ├── Demo Experiments/       # Example implementations
 │   ├── Binary Choice/      # Two-choice decision experiment
@@ -129,17 +126,24 @@ Assets/ResXR/
 
 ## ✨ Key Features
 
-### Player Tracking
-- **Hand Tracking**: Full hand skeleton tracking with pinch detection
-- **Eye Tracking**: Real-time gaze tracking and focused object detection
-- **Face Tracking**: Face expression weights and validity
-- **Body Tracking**: Body joint positions and calibration
-
 ### Data Collection
 - **Automatic Continuous Data**: Head, hands, eyes, body, face tracking at 50Hz
 - **Custom Event Logging**: Create custom data classes for experiment-specific events
 - **CSV Export**: All data exported to organized CSV files
 - **Metadata**: Automatic session metadata generation
+
+
+### ResXRPlayer API - Easy Access to Tracking Components
+While every VR app has tracking, ResXR provides a **simple, unified API** through `ResXRPlayer` singleton that gives you easy access to all tracking components without digging through OVR internals:
+
+- **Hand Tracking**: `ResXRPlayer.Instance.HandLeft/HandRight` - Direct access to hand tracking, pinch detection, and finger colliders
+- **Eye Tracking**: `ResXRPlayer.Instance.FocusedObject`, `EyeGazeHitPosition` - Simple properties for gaze tracking and focused object detection
+- **Face Tracking**: `ResXRPlayer.Instance.OVRFace` - Direct access to face expression weights and validity
+- **Body Tracking**: Body joint positions and calibration
+- **Player Transforms**: `PlayerHead`, `RightHand`, `LeftHand` - Easy access to player transforms
+- **Input Managers**: `ControllersInputManager`, `PinchingInputManager` - Unified input handling
+
+See `ResXRPlayer.cs` for the complete API. Access everything through `ResXRPlayer.Instance` - no need to find OVR components manually!
 
 ### Scene Management
 - **Additive Loading**: Experiment scenes are loaded additively on top of the Base Scene, which must remain open throughout your experiment
@@ -154,7 +158,7 @@ Assets/ResXR/
 
 ### Flow Management
 - **Hierarchical Structure**: Session → Round → Trial organization
-- **Flexible Design**: Copy and modify base classes for your experiment
+- **Use Base Classes Directly**: Use `SessionManager`, `RoundManager`, and `TrialManager` as-is (demo experiments duplicate them with prefixes for convenience, but it's not required)
 - **Clear Ownership**: You own and modify your experiment code
 
 ## 📚 Documentation
@@ -242,29 +246,19 @@ public class SceneReferencer : ResXRSingleton<SceneReferencer>
 ```
 
 ### Step 3: Set Up Flow Management
-Copy base classes from `Assets/ResXR/Flow Management/` and modify them:
+Use the base classes from `Assets/ResXR/Flow Management/` directly - no need to copy them. The demo experiments duplicate them with new names (e.g., `Maze_SessionManager`) for organizational convenience, but you can use `SessionManager`, `RoundManager`, and `TrialManager` as-is:
 
 ```csharp
-public class MySessionManager : ResXRSingleton<MySessionManager>
-{
-    [SerializeField] private Round[] _rounds;
-    
-    private void Start()
-    {
-        RunSessionFlow().Forget();
-    }
-    
-    public async UniTask RunSessionFlow()
-    {
-        // Your session logic here
-    }
-}
+// In your experiment scene, use SessionManager directly
+// Add it to a GameObject and configure in the Inspector
+// The base classes are designed to be used directly
 ```
 
 ### Step 4: Add Your Research Logic
-- Modify the Flow Management scripts directly
+- Use the Flow Management classes (`SessionManager`, `RoundManager`, `TrialManager`) directly in your scene
+- Configure them in the Inspector with your rounds and trials
 - Add custom data classes for logging
-- Implement your experiment-specific logic
+- Implement your experiment-specific logic in the provided methods (StartSession, EndSession, BetweenRoundsFlow, etc.)
 
 ## 🤝 Contributing
 
@@ -285,37 +279,6 @@ ResXR builds upon the early work of the [TAUXR Research Template](https://github
 
 We would like to thank the original contributors and developers for their work on the initial template, which helped shape the early direction of this project.
 
-- Built for Meta Quest research experiments
-- Uses Unity XR and Meta XR SDK
-- Includes third-party packages (see LICENSE for details)
-
-## ❓ Troubleshooting
-
-### Hand Tracking Not Working
-- Ensure hand tracking is enabled in OVR settings
-- Check that `ResXRHand` components are properly initialized
-- Verify OVR Skeleton components are present
-
-### Eye Tracking Not Working
-- Ensure eye tracking is enabled in headset settings
-- Check `IsEyeTrackingEnabled` is true on ResXRPlayer
-- Verify confidence threshold (default 0.5)
-
-### Data Not Logging
-- Check ResXRDataManager_V2 is in scene
-- Verify custom transforms are assigned in inspector
-- Check file permissions on device
-
-### Scene Not Loading
-- Verify scene is in Build Settings
-- Check BaseSceneIndex and FirstSceneToLoadIndex in ResXRSceneManager
-- Ensure scene name matches exactly
-
-### Meta SDK Installation Issues
-- Use `Tools > ResXR > Check Meta SDK Installation` to verify packages
-- Ensure all 8 packages are installed with version 78.0.0
-- Check Unity Package Manager for any errors
-
 ## 📞 Support
 
 For questions, issues, or inquiries:
@@ -326,13 +289,12 @@ For questions, issues, or inquiries:
 
 ## 🎯 Best Practices
 
-1. **Own Your Code** - Copy base classes and modify them directly
+1. **Own Your Code** - Use Flow Management base classes directly (SessionManager, RoundManager, TrialManager) - no need to copy them
 2. **Understand the System** - Read the code to understand how it works
 3. **Use Demo Experiments** - Learn from working examples
-4. **Test in Editor** - Use editor calibration for faster iteration
-5. **Log Everything** - Use ResXRDataManager_V2 for all experiment data
-6. **Follow Flow Hierarchy** - Use Session → Round → Trial structure
-7. **Keep It Transparent** - All code is open - understand and customize
+4. **Log Everything** - Use ResXRDataManager_V2 for all experiment data
+5. **Follow Flow Hierarchy** - Use Session → Round → Trial structure
+6. **Keep It Transparent** - All code is open - understand and customize
 
 ---
 
