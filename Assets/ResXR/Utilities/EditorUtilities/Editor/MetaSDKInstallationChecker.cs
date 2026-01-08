@@ -25,7 +25,12 @@ public class MetaSDKInstallationChecker
 
     static MetaSDKInstallationChecker()
     {
-        EditorApplication.delayCall += CheckMetaSDKInstallation;
+        // Delay the check to allow Unity to fully initialize
+        EditorApplication.delayCall += () =>
+        {
+            // Additional delay to ensure PackageManager is ready
+            EditorApplication.delayCall += CheckMetaSDKInstallation;
+        };
     }
 
     private static void CheckMetaSDKInstallation()
@@ -36,25 +41,41 @@ public class MetaSDKInstallationChecker
             return;
         }
 
-        // Wait a moment for PackageManager to initialize
-        EditorApplication.delayCall += () =>
+        try
         {
-            ListRequest listRequest = Client.List();
-            
-            // Wait for the request to complete
-            EditorApplication.update += () =>
+            // Wait a moment for PackageManager to initialize
+            EditorApplication.delayCall += () =>
             {
-                if (listRequest.IsCompleted)
+                try
                 {
-                    EditorApplication.update -= null;
+                    ListRequest listRequest = Client.List();
                     
-                    if (listRequest.Status == StatusCode.Success)
+                    // Wait for the request to complete
+                    EditorApplication.update += () =>
                     {
-                        CheckPackages(listRequest.Result);
-                    }
+                        if (listRequest.IsCompleted)
+                        {
+                            EditorApplication.update -= null;
+                            
+                            if (listRequest.Status == StatusCode.Success)
+                            {
+                                CheckPackages(listRequest.Result);
+                            }
+                        }
+                    };
+                }
+                catch (System.Exception e)
+                {
+                    // If PackageManager API fails, show dialog anyway
+                    Debug.LogWarning($"MetaSDKInstallationChecker: Could not check packages automatically. Error: {e.Message}. Please use Tools > ResXR > Check Meta SDK Installation to check manually.");
                 }
             };
-        };
+        }
+        catch (System.Exception e)
+        {
+            // If initialization fails, log but don't crash
+            Debug.LogWarning($"MetaSDKInstallationChecker: Initialization error: {e.Message}. Please use Tools > ResXR > Check Meta SDK Installation to check manually.");
+        }
     }
 
     private static void CheckPackages(PackageCollection packages)

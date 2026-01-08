@@ -44,9 +44,11 @@ cd <your-repository-name>
 2. Click "Add" and select the cloned project folder
 3. Unity will detect the project and open it
 
+**⚠️ Important**: When Unity first opens the project, you may see compilation errors in the Console. This is **expected and normal** - the project requires Meta SDK packages that aren't installed yet. **Please ignore these errors** for now and proceed to install the Meta SDK packages in the next step.
+
 ### 3. Install Meta SDK Packages
 
-When you first open the project, an installation checker dialog will appear if packages are missing. Follow the prompts to install the required Meta SDK packages.
+An installation checker dialog should appear automatically when you first open the project (if packages are missing). If the dialog doesn't appear, you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`. Follow the prompts to install the required Meta SDK packages.
 
 **Required packages (version 78.0.0):**
 - `com.meta.xr.mrutilitykit@78.0.0`
@@ -74,14 +76,15 @@ See the [Installation](#-installation) section for detailed instructions.
 
 ### Automatic Installation Checker
 
-When you first open the project, an installation checker will automatically detect missing Meta SDK packages and guide you through installation:
+When you first open the project, an installation checker should automatically detect missing Meta SDK packages and guide you through installation. **Note**: If the dialog doesn't appear automatically (which can happen if there are compilation errors), you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`.
 
+Once the dialog appears:
 1. Click "Open Package Manager" in the dialog
 2. Click the '+' button > "Add package by name"
 3. Add each package with version 78.0.0
 4. Repeat for all 8 packages
 
-You can also manually trigger the checker via: `Tools > ResXR > Check Meta SDK Installation`
+**Remember**: Ignore any compilation errors in Unity's Console until you've installed all the Meta SDK packages - these errors are expected and will resolve once the packages are installed.
 
 ### Manual Installation
 
