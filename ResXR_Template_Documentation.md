@@ -42,9 +42,82 @@ The **ResXR Research Template** is a comprehensive Unity XR template designed sp
 ### Prerequisites
 
 - Unity 2021.3 or later
-- Meta Quest SDK (OVR)
+- Meta Quest SDK (OVR) - See [Installation](#installation) section below
 - Meta Quest headset (Quest 2, Quest Pro, Quest 3)
 - Basic knowledge of Unity and C#
+
+### Installation
+
+**Important**: This template requires Meta XR SDK packages to function properly. The template does not include these packages due to licensing restrictions. You must install them manually.
+
+#### Required Meta SDK Packages
+
+The following packages (version 78.0.0) are required:
+
+- `com.meta.xr.mrutilitykit@78.0.0`
+- `com.meta.xr.sdk.audio@78.0.0`
+- `com.meta.xr.sdk.core@78.0.0`
+- `com.meta.xr.sdk.haptics@78.0.0`
+- `com.meta.xr.sdk.interaction.ovr@78.0.0`
+- `com.meta.xr.sdk.platform@78.0.0`
+- `com.meta.xr.sdk.voice@78.0.0`
+- `com.meta.xr.simulator@78.0.0`
+
+#### Installation Methods
+
+**Method 1: Automatic Checker (Recommended)**
+
+When you first open the project, an installation checker dialog will appear if packages are missing. You can:
+
+1. Click "Open Package Manager" to open Unity's Package Manager window
+2. Click the '+' button > "Add package by name"
+3. Add each package with version 78.0.0 (e.g., `com.meta.xr.sdk.core@78.0.0`)
+4. Repeat for all 8 packages
+
+You can also manually trigger the checker via: `Tools > ResXR > Check Meta SDK Installation`
+
+**Method 2: Manual Installation via Package Manager**
+
+1. Open `Window > Package Manager`
+2. Click the '+' button in the top-left
+3. Select "Add package by name"
+4. Enter each package name with version: `com.meta.xr.sdk.core@78.0.0`
+5. Click "Add"
+6. Repeat for all 8 required packages
+
+**Method 3: Edit manifest.json**
+
+1. Open `Packages/manifest.json`
+2. Add the following entries to the `dependencies` section:
+   ```json
+   "com.meta.xr.mrutilitykit": "78.0.0",
+   "com.meta.xr.sdk.audio": "78.0.0",
+   "com.meta.xr.sdk.core": "78.0.0",
+   "com.meta.xr.sdk.haptics": "78.0.0",
+   "com.meta.xr.sdk.interaction.ovr": "78.0.0",
+   "com.meta.xr.sdk.platform": "78.0.0",
+   "com.meta.xr.sdk.voice": "78.0.0",
+   "com.meta.xr.simulator": "78.0.0"
+   ```
+3. Unity will automatically download and install the packages
+
+#### Verification
+
+After installation, verify that:
+
+1. All packages appear in `Window > Package Manager` with version 78.0.0
+2. No compilation errors related to OVR types (e.g., `OVRPlugin`, `OVRManager`)
+3. The installation checker no longer shows warnings (if you dismissed it, use `Tools > ResXR > Check Meta SDK Installation`)
+
+#### Generated Files
+
+After installing the Meta SDK packages, Unity will automatically generate:
+
+- `Assets/Oculus/` directory (Meta SDK generated files)
+- `Assets/MetaXR/` directory (Meta SDK generated files)
+- Asset files in `Assets/Resources/` (e.g., `OculusRuntimeSettings.asset`, `OVRBuildConfig.asset`)
+
+These files are automatically generated and are ignored by git (see `.gitignore`). They will be recreated when you or other users install the Meta SDK packages.
 
 ### Project Structure
 
