@@ -78,4 +78,6 @@ crashlytics-build.properties
 /[Aa]ssets/Oculus/
 /[Aa]ssets/MetaXR/
 /[Aa]ssets/[Rr]esources/OVR*.asset
+/[Aa]ssets/[Rr]esources/OVR*.asset.meta
 /[Aa]ssets/[Rr]esources/MetaXR*.asset
+/[Aa]ssets/[Rr]esources/MetaXR*.asset.meta

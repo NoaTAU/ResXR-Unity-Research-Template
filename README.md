@@ -48,7 +48,17 @@ cd <your-repository-name>
 
 ### 3. Install Meta SDK Packages
 
-An installation checker dialog should appear automatically when you first open the project (if packages are missing). If the dialog doesn't appear, you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`. Follow the prompts to install the required Meta SDK packages.
+An installation checker dialog should appear automatically when Unity finishes loading. If it doesn't appear, you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`, or proceed with manual installation below.
+
+**If the dialog appears:**
+1. Click "Open Package Manager" in the dialog
+2. Follow the installation instructions shown
+
+**If the dialog doesn't appear (or for manual installation):**
+1. Open `Window > Package Manager`
+2. Click the '+' button > "Add package by name"
+3. Add each package with version 78.0.0 (see list below)
+4. Repeat for all 8 packages
 
 **Required packages (version 78.0.0):**
 - `com.meta.xr.mrutilitykit@78.0.0`
@@ -74,9 +84,15 @@ See the [Installation](#-installation) section for detailed instructions.
 
 ## 📦 Installation
 
-### Automatic Installation Checker
+An installation checker dialog should appear automatically when you first open the project. If it doesn't appear, you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`, or use manual installation below.
 
-When you first open the project, an installation checker should automatically detect missing Meta SDK packages and guide you through installation. **Note**: If the dialog doesn't appear automatically (which can happen if there are compilation errors), you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`.
+### Installation Methods
+
+**Method 1: Automatic Checker (Recommended)**
+
+When you first open the project, an installation checker dialog should appear automatically. If it doesn't appear:
+- Wait a few seconds for Unity to finish initializing
+- Or manually trigger it via `Tools > ResXR > Check Meta SDK Installation`
 
 Once the dialog appears:
 1. Click "Open Package Manager" in the dialog
@@ -84,20 +100,46 @@ Once the dialog appears:
 3. Add each package with version 78.0.0
 4. Repeat for all 8 packages
 
-**Remember**: Ignore any compilation errors in Unity's Console until you've installed all the Meta SDK packages - these errors are expected and will resolve once the packages are installed.
+**Method 2: Manual Installation**
 
-### Manual Installation
+**Required packages (version 78.0.0):**
+- `com.meta.xr.mrutilitykit@78.0.0`
+- `com.meta.xr.sdk.audio@78.0.0`
+- `com.meta.xr.sdk.core@78.0.0`
+- `com.meta.xr.sdk.haptics@78.0.0`
+- `com.meta.xr.sdk.interaction.ovr@78.0.0`
+- `com.meta.xr.sdk.platform@78.0.0`
+- `com.meta.xr.sdk.voice@78.0.0`
+- `com.meta.xr.simulator@78.0.0`
 
 **Via Package Manager:**
 1. Open `Window > Package Manager`
 2. Click the '+' button > "Add package by name"
-3. Enter each package: `com.meta.xr.sdk.core@78.0.0`
-4. Click "Add" and repeat for all packages
+3. Enter each package with version: `com.meta.xr.sdk.core@78.0.0`
+4. Click "Add" and repeat for all 8 packages listed above
 
 **Via manifest.json:**
 1. Open `Packages/manifest.json`
-2. Add the package entries to the `dependencies` section (see full list above)
+2. Add the following entries to the `dependencies` section:
+   ```json
+   "com.meta.xr.mrutilitykit": "78.0.0",
+   "com.meta.xr.sdk.audio": "78.0.0",
+   "com.meta.xr.sdk.core": "78.0.0",
+   "com.meta.xr.sdk.haptics": "78.0.0",
+   "com.meta.xr.sdk.interaction.ovr": "78.0.0",
+   "com.meta.xr.sdk.platform": "78.0.0",
+   "com.meta.xr.sdk.voice": "78.0.0",
+   "com.meta.xr.simulator": "78.0.0"
+   ```
 3. Unity will automatically download and install
+
+**Remember**: Ignore any compilation errors in Unity's Console until you've installed all the Meta SDK packages - these errors are expected and will resolve once the packages are installed.
+
+### Verify Installation
+
+After installing packages, you can verify installation:
+1. Go to `Tools > ResXR > Check Meta SDK Installation` (this menu should appear after Unity finishes compiling)
+2. The dialog will confirm all packages are correctly installed, or show any missing/wrong version packages
 
 ### Verification
 

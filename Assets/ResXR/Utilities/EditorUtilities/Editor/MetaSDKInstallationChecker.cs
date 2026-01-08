@@ -23,14 +23,26 @@ public class MetaSDKInstallationChecker
         "com.meta.xr.simulator"
     };
 
+    private static bool _hasChecked = false;
+
     static MetaSDKInstallationChecker()
     {
-        // Delay the check to allow Unity to fully initialize
-        EditorApplication.delayCall += () =>
-        {
-            // Additional delay to ensure PackageManager is ready
-            EditorApplication.delayCall += CheckMetaSDKInstallation;
-        };
+        // Use EditorApplication.update to wait for Unity to be ready
+        // This works even if there are compilation errors
+        EditorApplication.update += InitializeCheck;
+    }
+
+    private static void InitializeCheck()
+    {
+        // Only check once
+        if (_hasChecked) return;
+        
+        // Wait a frame to ensure Unity is initialized
+        EditorApplication.update -= InitializeCheck;
+        _hasChecked = true;
+        
+        // Delay the actual check
+        EditorApplication.delayCall += CheckMetaSDKInstallation;
     }
 
     private static void CheckMetaSDKInstallation()
@@ -41,40 +53,52 @@ public class MetaSDKInstallationChecker
             return;
         }
 
+        // Try to check packages, but show dialog immediately if checking fails
+        // This ensures users always get the installation prompt
+        bool checkSucceeded = false;
+        
         try
         {
-            // Wait a moment for PackageManager to initialize
-            EditorApplication.delayCall += () =>
+            ListRequest listRequest = Client.List();
+            
+            // Wait for the request to complete (with timeout)
+            int timeout = 0;
+            EditorApplication.update += CheckRequest;
+            
+            void CheckRequest()
             {
-                try
+                timeout++;
+                if (listRequest.IsCompleted)
                 {
-                    ListRequest listRequest = Client.List();
+                    EditorApplication.update -= CheckRequest;
+                    checkSucceeded = true;
                     
-                    // Wait for the request to complete
-                    EditorApplication.update += () =>
+                    if (listRequest.Status == StatusCode.Success)
                     {
-                        if (listRequest.IsCompleted)
-                        {
-                            EditorApplication.update -= null;
-                            
-                            if (listRequest.Status == StatusCode.Success)
-                            {
-                                CheckPackages(listRequest.Result);
-                            }
-                        }
-                    };
+                        CheckPackages(listRequest.Result);
+                    }
+                    else
+                    {
+                        // Request failed, show dialog with all packages as missing
+                        ShowInstallationDialog(REQUIRED_PACKAGES.ToList(), new List<string>());
+                    }
                 }
-                catch (System.Exception e)
+                else if (timeout > 300) // ~5 seconds timeout
                 {
-                    // If PackageManager API fails, show dialog anyway
-                    Debug.LogWarning($"MetaSDKInstallationChecker: Could not check packages automatically. Error: {e.Message}. Please use Tools > ResXR > Check Meta SDK Installation to check manually.");
+                    EditorApplication.update -= CheckRequest;
+                    // Timeout - show dialog anyway
+                    ShowInstallationDialog(REQUIRED_PACKAGES.ToList(), new List<string>());
                 }
-            };
+            }
         }
-        catch (System.Exception e)
+        catch
         {
-            // If initialization fails, log but don't crash
-            Debug.LogWarning($"MetaSDKInstallationChecker: Initialization error: {e.Message}. Please use Tools > ResXR > Check Meta SDK Installation to check manually.");
+            // If checking fails (e.g., due to compilation errors), show dialog with all packages as missing
+            // This ensures users always get the installation prompt
+            if (!checkSucceeded)
+            {
+                ShowInstallationDialog(REQUIRED_PACKAGES.ToList(), new List<string>());
+            }
         }
     }
 
@@ -164,6 +188,35 @@ public class MetaSDKInstallationChecker
     public static void ManualCheck()
     {
         EditorPrefs.DeleteKey(DONT_SHOW_KEY);
-        CheckMetaSDKInstallation();
+        
+        // Try to check packages, but if it fails, show dialog anyway
+        try
+        {
+            ListRequest listRequest = Client.List();
+            
+            // Wait for the request to complete
+            EditorApplication.update += () =>
+            {
+                if (listRequest.IsCompleted)
+                {
+                    EditorApplication.update -= null;
+                    
+                    if (listRequest.Status == StatusCode.Success)
+                    {
+                        CheckPackages(listRequest.Result);
+                    }
+                    else
+                    {
+                        // If request failed, show dialog with all packages as missing
+                        ShowInstallationDialog(REQUIRED_PACKAGES.ToList(), new List<string>());
+                    }
+                }
+            };
+        }
+        catch
+        {
+            // If checking fails (e.g., due to compilation errors), show dialog with all packages as missing
+            ShowInstallationDialog(REQUIRED_PACKAGES.ToList(), new List<string>());
+        }
     }
 }
