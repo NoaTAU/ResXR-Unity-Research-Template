@@ -44,33 +44,9 @@ cd <your-repository-name>
 2. Click "Add" and select the cloned project folder
 3. Unity will detect the project and open it
 
-**⚠️ Important**: When Unity first opens the project, you may see compilation errors in the Console. This is **expected and normal** - the project requires Meta SDK packages that aren't installed yet. **Please ignore these errors** for now and proceed to install the Meta SDK packages in the next step.
+### 3. SDK Included
 
-### 3. Install Meta SDK Packages
-
-An installation checker dialog should appear automatically when Unity finishes loading. If it doesn't appear, you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`, or proceed with manual installation below.
-
-**If the dialog appears:**
-1. Click "Open Package Manager" in the dialog
-2. Follow the installation instructions shown
-
-**If the dialog doesn't appear (or for manual installation):**
-1. Open `Window > Package Manager`
-2. Click the '+' button > "Add package by name"
-3. Add each package with version 78.0.0 (see list below)
-4. Repeat for all 8 packages
-
-**Required packages (version 78.0.0):**
-- `com.meta.xr.mrutilitykit@78.0.0`
-- `com.meta.xr.sdk.audio@78.0.0`
-- `com.meta.xr.sdk.core@78.0.0`
-- `com.meta.xr.sdk.haptics@78.0.0`
-- `com.meta.xr.sdk.interaction.ovr@78.0.0`
-- `com.meta.xr.sdk.platform@78.0.0`
-- `com.meta.xr.sdk.voice@78.0.0`
-- `com.meta.xr.simulator@78.0.0`
-
-See the [Installation](#-installation) section for detailed instructions.
+The Meta XR SDK (version 78.0.0) is included with this template. No manual package installation is required.
 
 ### 4. Create Your First Experiment
 
@@ -81,72 +57,6 @@ See the [Installation](#-installation) section for detailed instructions.
 5. **Important**: The Base Scene must be opened **with** your experiment scene additively. The Base Scene contains the player (`ResXRPlayer`) and data manager (`ResXRDataManager_V2`) which run continuously throughout your experiment, even when scenes are changed. Your experiment scene will be loaded additively on top of the Base Scene.
 6. Modify the `SceneReferencer` and flow management (SessionManager, RoundManager, TrialManager) scripts to add your experiment references
 7. Build and run!
-
-## 📦 Installation
-
-An installation checker dialog should appear automatically when you first open the project. If it doesn't appear, you can manually trigger it via `Tools > ResXR > Check Meta SDK Installation`, or use manual installation below.
-
-### Installation Methods
-
-**Method 1: Automatic Checker (Recommended)**
-
-When you first open the project, an installation checker dialog should appear automatically. If it doesn't appear:
-- Wait a few seconds for Unity to finish initializing
-- Or manually trigger it via `Tools > ResXR > Check Meta SDK Installation`
-
-Once the dialog appears:
-1. Click "Open Package Manager" in the dialog
-2. Click the '+' button > "Add package by name"
-3. Add each package with version 78.0.0
-4. Repeat for all 8 packages
-
-**Method 2: Manual Installation**
-
-**Required packages (version 78.0.0):**
-- `com.meta.xr.mrutilitykit@78.0.0`
-- `com.meta.xr.sdk.audio@78.0.0`
-- `com.meta.xr.sdk.core@78.0.0`
-- `com.meta.xr.sdk.haptics@78.0.0`
-- `com.meta.xr.sdk.interaction.ovr@78.0.0`
-- `com.meta.xr.sdk.platform@78.0.0`
-- `com.meta.xr.sdk.voice@78.0.0`
-- `com.meta.xr.simulator@78.0.0`
-
-**Via Package Manager:**
-1. Open `Window > Package Manager`
-2. Click the '+' button > "Add package by name"
-3. Enter each package with version: `com.meta.xr.sdk.core@78.0.0`
-4. Click "Add" and repeat for all 8 packages listed above
-
-**Via manifest.json:**
-1. Open `Packages/manifest.json`
-2. Add the following entries to the `dependencies` section:
-   ```json
-   "com.meta.xr.mrutilitykit": "78.0.0",
-   "com.meta.xr.sdk.audio": "78.0.0",
-   "com.meta.xr.sdk.core": "78.0.0",
-   "com.meta.xr.sdk.haptics": "78.0.0",
-   "com.meta.xr.sdk.interaction.ovr": "78.0.0",
-   "com.meta.xr.sdk.platform": "78.0.0",
-   "com.meta.xr.sdk.voice": "78.0.0",
-   "com.meta.xr.simulator": "78.0.0"
-   ```
-3. Unity will automatically download and install
-
-**Remember**: Ignore any compilation errors in Unity's Console until you've installed all the Meta SDK packages - these errors are expected and will resolve once the packages are installed.
-
-### Verify Installation
-
-After installing packages, you can verify installation:
-1. Go to `Tools > ResXR > Check Meta SDK Installation` (this menu should appear after Unity finishes compiling)
-2. The dialog will confirm all packages are correctly installed, or show any missing/wrong version packages
-
-### Verification
-
-After installation:
-- All packages should appear in Package Manager with version 78.0.0
-- No compilation errors related to OVR types
-- Installation checker shows no warnings
 
 ## 📁 Project Structure
 
@@ -316,7 +226,13 @@ This is a research template. Contributions, improvements, and feedback are welco
 
 ## 📄 License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License, Version 2.0.
+
+### Third-Party SDKs
+
+This repository includes the Meta XR SDK, which is provided by Meta Platform Technologies, LLC and its affiliates, and is licensed separately under the Meta SDK License Agreement.
+
+The Meta XR SDK is not covered by the Apache License 2.0 and is subject to its own license terms. Use, redistribution, and sublicensing of the Meta XR SDK are governed solely by the Meta SDK License Agreement.
 
 ## 🙏 Acknowledgments
 
