@@ -1,9 +1,11 @@
 # CONTINUOUSDATA_V2 - column <- source
 
 # - Timing (Unity clock kept for continuity) -
+# [Collector: ResXRDataManager_V2 (direct)]
 timeSinceStartup                          <- Unity: Time.realTimeSinceStartup
 
 # - Legacy head pose (Euler) from Head node -
+# [Collector: OVRNodesCollector]
 Head_Position_x                            <- OVRPlugin.GetNodePose(node, step).Posef.Position.x
 Head_Height                                <- ...Position.y
 Head_Position_Z                            <- ...Position.z
@@ -17,16 +19,22 @@ HeadNodePositionTracked                    <- OVRPlugin.GetNodePositionTracked(N
 HeadNodeTime                               <- from GetNodePoseStateRaw(<Node>, step).Time
 
 # - Legacy gaze hit point/raycast  -
+# [Collector: OVREyesCollector]
 FocusedObject                              <- ResXRPlayer.Instance.FocusedObject (GameObject name or "none")
 EyeGazeHitPosition_X                       <- ResXRPlayer.Instance.EyeGazeHitPosition.x
 EyeGazeHitPosition_Y                       <- ResXRPlayer.Instance.EyeGazeHitPosition.y
 EyeGazeHitPosition_Z                       <- ResXRPlayer.Instance.EyeGazeHitPosition.z
 
 # - Eye gazes (dedicated API) -
-RightEye_Pitch                             <- OVRPlugin.GetEyeGazesState(step, frameIndex, ref state).EyeGazes[(int)OVRPlugin.Eye.Right].Pose -> Euler.x
-RightEye_Yaw                               <- ...EyeGazes[(int)OVRPlugin.Eye.Right].Pose -> Euler.y
-LeftEye_Pitch                              <- ...EyeGazes[(int)OVRPlugin.Eye.Left].Pose  -> Euler.x
-LeftEye_Yaw                                <- ...EyeGazes[(int)OVRPlugin.Eye.Left].Pose  -> Euler.y
+# [Collector: OVREyesCollector]
+RightEye_qx                                <- OVRPlugin.GetEyeGazesState(step, frameIndex, ref state).EyeGazes[(int)OVRPlugin.Eye.Right].Pose.Orientation.x
+RightEye_qy                                <- ...EyeGazes[(int)OVRPlugin.Eye.Right].Pose.Orientation.y
+RightEye_qz                                <- ...EyeGazes[(int)OVRPlugin.Eye.Right].Pose.Orientation.z
+RightEye_qw                                <- ...EyeGazes[(int)OVRPlugin.Eye.Right].Pose.Orientation.w
+LeftEye_qx                                 <- ...EyeGazes[(int)OVRPlugin.Eye.Left].Pose.Orientation.x
+LeftEye_qy                                 <- ...EyeGazes[(int)OVRPlugin.Eye.Left].Pose.Orientation.y
+LeftEye_qz                                 <- ...EyeGazes[(int)OVRPlugin.Eye.Left].Pose.Orientation.z
+LeftEye_qw                                 <- ...EyeGazes[(int)OVRPlugin.Eye.Left].Pose.Orientation.w
 LeftEye_IsValid                            <- state.EyeGazes[(int)OVRPlugin.Eye.Left].IsValid         (0/1)
 LeftEye_Confidence                         <- state.EyeGazes[(int)OVRPlugin.Eye.Left].Confidence      (string)
 RightEye_IsValid                           <- state.EyeGazes[(int)OVRPlugin.Eye.Right].IsValid        (0/1)
@@ -34,10 +42,12 @@ RightEye_Confidence                        <- state.EyeGazes[(int)OVRPlugin.Eye.
 Eyes_Time                                  <- state.Time   (double, seconds; shared timestamp for both eyes)
 
 # - Recenter flags (system) -
+# [Collector: RecenterCollector]
 shouldRecenter                             <- OVRPlugin.shouldRecenter                                (0/1 if OVRPlugin.shouldRecenter available. else empty to indicate its not reading from OVRPlugin)
 recenterEvent                              <- Derived: rising edge of shouldRecenter                  (1 only on the first frame where shouldRecenter changes 0->1; otherwise 0, empty when OVRPlugin.shouldRecenter isn't available)
 
 # - Device nodes (for each <Node> in order: EyeLeft, EyeRight, EyeCenter, Head, HandLeft, HandRight, ControllerLeft, ControllerRight) -
+# [Collector: OVRNodesCollector]
 Node_<Node>_Present                        <- OVRPlugin.GetNodePresent(<Node>)                        (0/1)
 Node_<Node>_px / _py / _pz                 <- GetNodePose(<Node>, step).Position.{x,y,z}
 Node_<Node>_qx / _qy / _qz / _qw           <- ...Posef.Orientation.{x,y,z,w}
@@ -50,6 +60,7 @@ Node_<Node>_Tracked_Orientation            <- OVRPlugin.GetNodeOrientationTracke
 Node_<Node>_Time                           <- from GetNodePoseStateRaw(<Node>, step).Time
 
 # - Hands (dedicated API; LEFT then RIGHT) -
+# [Collector: OVRHandsCollector]
 LeftHand_Status                            <- OVRPlugin.GetHandState(step, Hand.HandLeft).Status
 LeftHand_Root_px/_py/_pz                   <- HandState.RootPose.Position.{x,y,z}
 LeftHand_Root_qx/_qy/_qz/_qw               <- HandState.RootPose.Orientation.{x,y,z,w}
@@ -70,6 +81,7 @@ LeftHand_BoneRot_[ii]_qx/_qy/_qz/_qw       <- HandState.Quatf[]   BoneRotations[
 RightHand_*                                <- Same fields as LeftHand (Hand.HandRight)
 
 # - Body (BodyState4; frame + joints) -
+# [Collector: OVRBodyCollector]
 Body_Time                                   <- OVRPlugin.GetBodyState4(step,...).Time
 Body_Confidence                             <- state.Confidence
 Body_Fidelity                               <- state.Fidelity
@@ -82,9 +94,11 @@ Body_Joint_<J>_qx/_qy/_qz/_qw                   <- state.JointLocations[J].Posef
 Body_Joint_<J>_Flags                            <- state.JointLocations[J].LocationFlags  (bitfield)
 
 # - Perf -
+# [Collector: OVRPerformanceCollector]
 AppMotionToPhotonLatency                    <- OVRPlugin.AppMotionToPhotonLatency (ms, if available)
 
 # - Custom transforms (experiment-specific; registered order) -
+# [Collector: CustomTransformsCollector]
 Custom_<Name>_px/_py/_pz                    <- Unity Transform.position.{x,y,z}
 Custom_<Name>_qx/_qy/_qz/_qw                <- Unity Transform.rotation.{x,y,z,w}
 
@@ -93,16 +107,20 @@ Custom_<Name>_qx/_qy/_qz/_qw                <- Unity Transform.rotation.{x,y,z,w
 # FACEEXPRESSIONS_V2 - column <- source
 
 # - Timing -
+# [Collector: ResXRDataManager_V2 (direct)]
 timeSinceStartup                          <- Unity: Time.realTimeSinceStartup (renamed from "TimeFromStart") [legacy continuity]
 
 # - Face state (dedicated API: FaceState2) -
+# [Collector: OVRFaceCollector]
 Face_Time                                 <- FaceState.Time         (sdk timestamp, seconds)
 Face_Status                               <- FaceState.Status.IsValid (bool: true/false)
 
 # - Expression weights (OVRPlugin.FaceExpression2 names, one per entry) -
+# [Collector: OVRFaceCollector]
 Brow_Lowerer_L ... Tongue_Retreat           <- FaceState.ExpressionWeights[i] (int 0..69, one per enum entry)
 
 # - Region confidences (OVRPlugin.FaceRegionConfidence) -
+# [Collector: OVRFaceCollector]
 FaceRegionConfidence_Upper, FaceRegionConfidence_Lower <- FaceState.ExpressionWeightConfidences[Upper/Lower] as string
 
 

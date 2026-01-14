@@ -53,7 +53,7 @@ Continuous / Custom / FlagsOnly: (none)
 Continuous / Custom / ValuesOnly: Custom_{TransformName}_px, Custom_{TransformName}_py, Custom_{TransformName}_pz, Custom_{TransformName}_qx, Custom_{TransformName}_qy, Custom_{TransformName}_qz, Custom_{TransformName}_qw
 Continuous / Custom / Time: (none)
 Continuous / Eyes / FlagsOnly: LeftEye_IsValid, LeftEye_Confidence, RightEye_IsValid, RightEye_Confidence
-Continuous / Eyes / ValuesOnly: RightEye_Pitch, RightEye_Yaw, LeftEye_Pitch, LeftEye_Yaw
+Continuous / Eyes / ValuesOnly: RightEye_qx, RightEye_qy, RightEye_qz, RightEye_qw, LeftEye_qx, LeftEye_qy, LeftEye_qz, LeftEye_qw
 Continuous / Eyes / Time: Eyes_Time
 Continuous / GazeLegacy / FlagsOnly: (none)
 Continuous / GazeLegacy / ValuesOnly: FocusedObject, EyeGazeHitPosition_X, EyeGazeHitPosition_Y, EyeGazeHitPosition_Z

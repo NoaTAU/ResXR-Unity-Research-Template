@@ -233,10 +233,8 @@ namespace ResXRData
             // Eyes (dedicated API)
             if (recordingOptions.includeEyes)
             {
-                schemaBuilder.Add("RightEye_Pitch");
-                schemaBuilder.Add("RightEye_Yaw");
-                schemaBuilder.Add("LeftEye_Pitch");
-                schemaBuilder.Add("LeftEye_Yaw");
+                schemaBuilder.AddMany("RightEye", new[] { "qx", "qy", "qz", "qw" });
+                schemaBuilder.AddMany("LeftEye", new[] { "qx", "qy", "qz", "qw" });
                 schemaBuilder.Add("LeftEye_IsValid");
                 schemaBuilder.Add("LeftEye_Confidence");
                 schemaBuilder.Add("RightEye_IsValid");

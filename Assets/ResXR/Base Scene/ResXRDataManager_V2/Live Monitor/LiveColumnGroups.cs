@@ -201,10 +201,14 @@ namespace ResXRData
             AddIfExists(LiveColumnGroupKind.Nodes, "HeadNodeTime");
 
             // Eyes summary (dedicated block)
-            AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_Pitch");
-            AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_Yaw");
-            AddIfExists(LiveColumnGroupKind.Eyes, "RightEye_Pitch");
-            AddIfExists(LiveColumnGroupKind.Eyes, "RightEye_Yaw");
+            AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_qx");
+            AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_qy");
+            AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_qz");
+            AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_qw");
+            AddIfExists(LiveColumnGroupKind.Eyes, "RightEye_qx");
+            AddIfExists(LiveColumnGroupKind.Eyes, "RightEye_qy");
+            AddIfExists(LiveColumnGroupKind.Eyes, "RightEye_qz");
+            AddIfExists(LiveColumnGroupKind.Eyes, "RightEye_qw");
             AddIfExists(LiveColumnGroupKind.Eyes, "Eyes_Time");
             AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_IsValid");
             AddIfExists(LiveColumnGroupKind.Eyes, "RightEye_IsValid");

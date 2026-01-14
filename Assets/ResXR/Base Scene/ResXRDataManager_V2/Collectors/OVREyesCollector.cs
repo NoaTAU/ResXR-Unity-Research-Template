@@ -18,8 +18,8 @@ namespace ResXRData
         private ResXRPlayer _player;
 
         // Dedicated eye block
-        private int _idxRightPitch = -1, _idxRightYaw = -1;
-        private int _idxLeftPitch = -1, _idxLeftYaw = -1;
+        private int _idxRightQx = -1, _idxRightQy = -1, _idxRightQz = -1, _idxRightQw = -1;
+        private int _idxLeftQx = -1, _idxLeftQy = -1, _idxLeftQz = -1, _idxLeftQw = -1;
         private int _idxLeftValid = -1, _idxLeftConf = -1;
         private int _idxRightValid = -1, _idxRightConf = -1;
         private int _idxEyesTime = -1;
@@ -43,10 +43,15 @@ namespace ResXRData
 
             if (_writeDedicatedEyes)
             {
-                TryIndex(schema, "RightEye_Pitch", out _idxRightPitch);
-                TryIndex(schema, "RightEye_Yaw", out _idxRightYaw);
-                TryIndex(schema, "LeftEye_Pitch", out _idxLeftPitch);
-                TryIndex(schema, "LeftEye_Yaw", out _idxLeftYaw);
+                TryIndex(schema, "RightEye_qx", out _idxRightQx);
+                TryIndex(schema, "RightEye_qy", out _idxRightQy);
+                TryIndex(schema, "RightEye_qz", out _idxRightQz);
+                TryIndex(schema, "RightEye_qw", out _idxRightQw);
+                
+                TryIndex(schema, "LeftEye_qx", out _idxLeftQx);
+                TryIndex(schema, "LeftEye_qy", out _idxLeftQy);
+                TryIndex(schema, "LeftEye_qz", out _idxLeftQz);
+                TryIndex(schema, "LeftEye_qw", out _idxLeftQw);
 
                 TryIndex(schema, "LeftEye_IsValid", out _idxLeftValid);
                 TryIndex(schema, "LeftEye_Confidence", out _idxLeftConf);
@@ -75,19 +80,19 @@ namespace ResXRData
                 {
                     // Right eye
                     EyeGazeState right = state.EyeGazes[(int)Eye.Right];
-                    Quaternion qR = new Quaternion(right.Pose.Orientation.x, right.Pose.Orientation.y, right.Pose.Orientation.z, right.Pose.Orientation.w);
-                    Vector3 eR = qR.eulerAngles;
-                    SetIfValid(row, _idxRightPitch, eR.x);
-                    SetIfValid(row, _idxRightYaw, eR.y);
+                    SetIfValid(row, _idxRightQx, right.Pose.Orientation.x);
+                    SetIfValid(row, _idxRightQy, right.Pose.Orientation.y);
+                    SetIfValid(row, _idxRightQz, right.Pose.Orientation.z);
+                    SetIfValid(row, _idxRightQw, right.Pose.Orientation.w);
                     SetIfValid(row, _idxRightValid, right.IsValid ? 1 : 0);
                     SetIfValid(row, _idxRightConf, right.Confidence);
 
                     // Left eye
                     EyeGazeState left = state.EyeGazes[(int)Eye.Left];
-                    Quaternion qL = new Quaternion(left.Pose.Orientation.x, left.Pose.Orientation.y, left.Pose.Orientation.z, left.Pose.Orientation.w);
-                    Vector3 eL = qL.eulerAngles;
-                    SetIfValid(row, _idxLeftPitch, eL.x);
-                    SetIfValid(row, _idxLeftYaw, eL.y);
+                    SetIfValid(row, _idxLeftQx, left.Pose.Orientation.x);
+                    SetIfValid(row, _idxLeftQy, left.Pose.Orientation.y);
+                    SetIfValid(row, _idxLeftQz, left.Pose.Orientation.z);
+                    SetIfValid(row, _idxLeftQw, left.Pose.Orientation.w);
                     SetIfValid(row, _idxLeftValid, left.IsValid ? 1 : 0);
                     SetIfValid(row, _idxLeftConf, left.Confidence);
 

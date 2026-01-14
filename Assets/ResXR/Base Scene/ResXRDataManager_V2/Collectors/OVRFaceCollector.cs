@@ -59,7 +59,7 @@ namespace ResXRData
                 }
             }
 
-            // Fallback to numeric headers if names weren’t used in the schema
+            // Fallback to numeric headers if names werenâ€™t used in the schema
             if (!_usedNamedExpressions)
             {
                 _exprCols.Clear();
