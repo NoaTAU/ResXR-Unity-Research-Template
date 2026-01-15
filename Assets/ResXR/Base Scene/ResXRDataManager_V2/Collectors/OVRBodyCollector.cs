@@ -109,16 +109,18 @@ namespace ResXRData
             {
                 BodyJointLocation loc = bodyState.JointLocations[j];
 
-                Vector3f p = loc.Pose.Position;
-                SetIfValid(row, _idxPosX[j], p.x);
-                SetIfValid(row, _idxPosY[j], p.y);
-                SetIfValid(row, _idxPosZ[j], p.z);
+                // Convert joint position to world space
+                Vector3 worldPos = TrackingSpaceConverter.ToWorldSpacePosition(loc.Pose);
+                SetIfValid(row, _idxPosX[j], worldPos.x);
+                SetIfValid(row, _idxPosY[j], worldPos.y);
+                SetIfValid(row, _idxPosZ[j], worldPos.z);
 
-                Quatf q = loc.Pose.Orientation;
-                SetIfValid(row, _idxQx[j], q.x);
-                SetIfValid(row, _idxQy[j], q.y);
-                SetIfValid(row, _idxQz[j], q.z);
-                SetIfValid(row, _idxQw[j], q.w);
+                // Convert joint rotation to world space
+                Quaternion worldRot = TrackingSpaceConverter.ToWorldSpaceRotation(loc.Pose.Orientation);
+                SetIfValid(row, _idxQx[j], worldRot.x);
+                SetIfValid(row, _idxQy[j], worldRot.y);
+                SetIfValid(row, _idxQz[j], worldRot.z);
+                SetIfValid(row, _idxQw[j], worldRot.w);
 
                 SetIfValid(row, _idxFlags[j], loc.LocationFlags.ToString());
             }

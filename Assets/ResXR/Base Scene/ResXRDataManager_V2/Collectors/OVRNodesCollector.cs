@@ -96,13 +96,17 @@ namespace ResXRData
         public void Collect(RowBuffer row, float timeSinceStartup)
         {
             // ----- Legacy head pose (Euler from quaternion) -----
-            Posef headPose = GetNodePose(Node.Head, SampleStep); // Posef (no time) :contentReference[oaicite:4]{index=4}
-            SetIfValid(row, _idxHeadPosX, headPose.Position.x);
-            SetIfValid(row, _idxHeadHeight, headPose.Position.y);
-            SetIfValid(row, _idxHeadPosZ, headPose.Position.z);
+            Posef headPose = GetNodePose(Node.Head, SampleStep); // Posef (no time)
+            
+            // Convert tracking space to world space
+            Vector3 headWorldPos = TrackingSpaceConverter.ToWorldSpacePosition(headPose);
+            SetIfValid(row, _idxHeadPosX, headWorldPos.x);
+            SetIfValid(row, _idxHeadHeight, headWorldPos.y);
+            SetIfValid(row, _idxHeadPosZ, headWorldPos.z);
 
-            Quaternion qHead = new Quaternion(headPose.Orientation.x, headPose.Orientation.y, headPose.Orientation.z, headPose.Orientation.w);
-            Vector3 euler = qHead.eulerAngles;
+            // Convert orientation to world space, then calculate Euler
+            Quaternion qHeadWorld = TrackingSpaceConverter.ToWorldSpaceRotation(headPose.Orientation);
+            Vector3 euler = qHeadWorld.eulerAngles;
             SetIfValid(row, _idxGazePitch, euler.x);
             SetIfValid(row, _idxGazeYaw, euler.y);
             SetIfValid(row, _idxGazeRoll, euler.z);
@@ -129,24 +133,33 @@ namespace ResXRData
                 bool present = GetNodePresent(node);
                 SetIfValid(row, cols.Present, present ? 1 : 0);
 
+                // Convert position to world space
                 Posef pose = GetNodePose(node, SampleStep);
-                SetIfValid(row, cols.PosX, pose.Position.x);
-                SetIfValid(row, cols.PosY, pose.Position.y);
-                SetIfValid(row, cols.PosZ, pose.Position.z);
-                SetIfValid(row, cols.Qx, pose.Orientation.x);
-                SetIfValid(row, cols.Qy, pose.Orientation.y);
-                SetIfValid(row, cols.Qz, pose.Orientation.z);
-                SetIfValid(row, cols.Qw, pose.Orientation.w);
+                Vector3 worldPos = TrackingSpaceConverter.ToWorldSpacePosition(pose);
+                SetIfValid(row, cols.PosX, worldPos.x);
+                SetIfValid(row, cols.PosY, worldPos.y);
+                SetIfValid(row, cols.PosZ, worldPos.z);
+                
+                // Convert rotation to world space
+                Quaternion worldRot = TrackingSpaceConverter.ToWorldSpaceRotation(pose.Orientation);
+                SetIfValid(row, cols.Qx, worldRot.x);
+                SetIfValid(row, cols.Qy, worldRot.y);
+                SetIfValid(row, cols.Qz, worldRot.z);
+                SetIfValid(row, cols.Qw, worldRot.w);
 
+                // Convert velocity to world space (rotation only, no offset)
                 Vector3f vel = GetNodeVelocity(node, SampleStep);
-                SetIfValid(row, cols.VelX, vel.x);
-                SetIfValid(row, cols.VelY, vel.y);
-                SetIfValid(row, cols.VelZ, vel.z);
+                Vector3 worldVel = TrackingSpaceConverter.RotateVectorToWorldSpace(vel);
+                SetIfValid(row, cols.VelX, worldVel.x);
+                SetIfValid(row, cols.VelY, worldVel.y);
+                SetIfValid(row, cols.VelZ, worldVel.z);
 
+                // Convert angular velocity to world space (rotation only, no offset)
                 Vector3f angVel = GetNodeAngularVelocity(node, SampleStep);
-                SetIfValid(row, cols.AngVelX, angVel.x);
-                SetIfValid(row, cols.AngVelY, angVel.y);
-                SetIfValid(row, cols.AngVelZ, angVel.z);
+                Vector3 worldAngVel = TrackingSpaceConverter.RotateVectorToWorldSpace(angVel);
+                SetIfValid(row, cols.AngVelX, worldAngVel.x);
+                SetIfValid(row, cols.AngVelY, worldAngVel.y);
+                SetIfValid(row, cols.AngVelZ, worldAngVel.z);
 
                 bool validPos = GetNodePositionValid(node);
                 bool validOrient = GetNodeOrientationValid(node);

@@ -78,21 +78,23 @@ namespace ResXRData
                 bool ok = GetEyeGazesState(SampleStep, LatestFrame, ref state);
                 if (ok && state.EyeGazes != null && state.EyeGazes.Length >= (int)Eye.Count)
                 {
-                    // Right eye
+                    // Right eye - convert orientation to world space
                     EyeGazeState right = state.EyeGazes[(int)Eye.Right];
-                    SetIfValid(row, _idxRightQx, right.Pose.Orientation.x);
-                    SetIfValid(row, _idxRightQy, right.Pose.Orientation.y);
-                    SetIfValid(row, _idxRightQz, right.Pose.Orientation.z);
-                    SetIfValid(row, _idxRightQw, right.Pose.Orientation.w);
+                    Quaternion rightWorldRot = TrackingSpaceConverter.ToWorldSpaceRotation(right.Pose.Orientation);
+                    SetIfValid(row, _idxRightQx, rightWorldRot.x);
+                    SetIfValid(row, _idxRightQy, rightWorldRot.y);
+                    SetIfValid(row, _idxRightQz, rightWorldRot.z);
+                    SetIfValid(row, _idxRightQw, rightWorldRot.w);
                     SetIfValid(row, _idxRightValid, right.IsValid ? 1 : 0);
                     SetIfValid(row, _idxRightConf, right.Confidence);
 
-                    // Left eye
+                    // Left eye - convert orientation to world space
                     EyeGazeState left = state.EyeGazes[(int)Eye.Left];
-                    SetIfValid(row, _idxLeftQx, left.Pose.Orientation.x);
-                    SetIfValid(row, _idxLeftQy, left.Pose.Orientation.y);
-                    SetIfValid(row, _idxLeftQz, left.Pose.Orientation.z);
-                    SetIfValid(row, _idxLeftQw, left.Pose.Orientation.w);
+                    Quaternion leftWorldRot = TrackingSpaceConverter.ToWorldSpaceRotation(left.Pose.Orientation);
+                    SetIfValid(row, _idxLeftQx, leftWorldRot.x);
+                    SetIfValid(row, _idxLeftQy, leftWorldRot.y);
+                    SetIfValid(row, _idxLeftQz, leftWorldRot.z);
+                    SetIfValid(row, _idxLeftQw, leftWorldRot.w);
                     SetIfValid(row, _idxLeftValid, left.IsValid ? 1 : 0);
                     SetIfValid(row, _idxLeftConf, left.Confidence);
 

@@ -2,11 +2,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System;
-
-
-#if UNITY_EDITOR
 using NaughtyAttributes;
-#endif
+
 
 /// <summary>
 /// Resizes a background mesh (e.g., Quad) to match the combined bounds of one or more 3D TextMeshPro components.

@@ -161,6 +161,18 @@ namespace ResXRData
             var face = SchemaFactories.BuildFaceExpressionsV2();                 // (schema, counts)
             _faceSchema = face.schema;
 
+            // 4.5) Initialize tracking space converter for world space conversion
+            OVRCameraRig cameraRig = FindObjectOfType<OVRCameraRig>();
+            if (cameraRig != null && cameraRig.trackingSpace != null)
+            {
+                TrackingSpaceConverter.Initialize(cameraRig.trackingSpace);
+                Debug.Log("[ResXRDataManager_V2] TrackingSpaceConverter initialized for world space conversion");
+            }
+            else
+            {
+                Debug.LogError("[ResXRDataManager_V2] OVRCameraRig not found - world space conversion unavailable!");
+            }
+
             // 5) Writers
             string contPath = Path.Combine(_rootDir, $"{sessionTime}_ContinuousData.csv");
             _continuousWriter = new CsvRowWriter(contPath, csvDelimiter, null, appendIfFilesExist);

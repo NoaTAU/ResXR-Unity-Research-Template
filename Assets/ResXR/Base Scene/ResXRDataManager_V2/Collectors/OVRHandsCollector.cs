@@ -140,14 +140,18 @@ namespace ResXRData
 
             SetIfValid(row, cols.Status, handState.Status.ToString());
 
+            // Convert hand root pose to world space
             Posef root = handState.RootPose;
-            SetIfValid(row, cols.RootPosX, root.Position.x);
-            SetIfValid(row, cols.RootPosY, root.Position.y);
-            SetIfValid(row, cols.RootPosZ, root.Position.z);
-            SetIfValid(row, cols.RootQx, root.Orientation.x);
-            SetIfValid(row, cols.RootQy, root.Orientation.y);
-            SetIfValid(row, cols.RootQz, root.Orientation.z);
-            SetIfValid(row, cols.RootQw, root.Orientation.w);
+            Vector3 rootWorldPos = TrackingSpaceConverter.ToWorldSpacePosition(root);
+            SetIfValid(row, cols.RootPosX, rootWorldPos.x);
+            SetIfValid(row, cols.RootPosY, rootWorldPos.y);
+            SetIfValid(row, cols.RootPosZ, rootWorldPos.z);
+            
+            Quaternion rootWorldRot = TrackingSpaceConverter.ToWorldSpaceRotation(root.Orientation);
+            SetIfValid(row, cols.RootQx, rootWorldRot.x);
+            SetIfValid(row, cols.RootQy, rootWorldRot.y);
+            SetIfValid(row, cols.RootQz, rootWorldRot.z);
+            SetIfValid(row, cols.RootQw, rootWorldRot.w);
 
             SetIfValid(row, cols.HandScale, handState.HandScale);
             SetIfValid(row, cols.HandConfidence, handState.HandConfidence.ToString());
