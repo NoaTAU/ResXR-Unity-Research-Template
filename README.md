@@ -21,7 +21,7 @@ Unlike other solutions that provide black-box classes, ResXR is designed as a **
 ## 📋 Prerequisites
 
 - **Unity 2021.3 or later**
-- **Meta Quest SDK (OVR)** - See [Installation](#-installation) section below
+- **Meta Quest SDK (OVR)** - Automatically installed via Unity Package Manager (see below)
 - **Meta Quest headset** (Quest 2, Quest Pro, Quest 3)
 - **Basic knowledge** of Unity and C#
 
@@ -44,9 +44,9 @@ cd <your-repository-name>
 2. Click "Add" and select the cloned project folder
 3. Unity will detect the project and open it
 
-### 3. SDK Included
+### 3. SDK Installation (Automatic)
 
-The Meta XR SDK (version 78.0.0) is included with this template. No manual package installation is required.
+This project requires the Meta XR SDK, which is automatically installed via Unity Package Manager based on package dependencies defined in `Packages/manifest.json`. The SDK itself is not included in this repository. When you open the project in Unity for the first time, Unity will automatically download and install the required Meta XR packages (version 78.0.0).
 
 ### 4. Create Your First Experiment
 
@@ -228,11 +228,11 @@ This is a research template. Contributions, improvements, and feedback are welco
 
 This project is licensed under the Apache License, Version 2.0.
 
-### Third-Party SDKs
+### Third-Party Dependencies
 
-This repository includes the Meta XR SDK, which is provided by Meta Platform Technologies, LLC and its affiliates, and is licensed separately under the Meta SDK License Agreement.
+This project requires the Meta XR SDK, which is automatically installed via Unity Package Manager based on package dependencies defined in `Packages/manifest.json`. The SDK itself is not included in this repository.
 
-The Meta XR SDK is not covered by the Apache License 2.0 and is subject to its own license terms. Use, redistribution, and sublicensing of the Meta XR SDK are governed solely by the Meta SDK License Agreement.
+The Meta XR SDK is provided by Meta Platform Technologies, LLC and its affiliates, and is licensed under the Meta SDK License Agreement. The Meta XR SDK is not covered by the Apache License 2.0 and is subject to its own license terms.
 
 ## 🙏 Acknowledgments
 

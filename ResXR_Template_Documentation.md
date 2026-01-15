@@ -42,9 +42,11 @@ The **ResXR Research Template** is a comprehensive Unity XR template designed sp
 ### Prerequisites
 
 - Unity 2021.3 or later
-- Meta Quest SDK (OVR)
+- Meta Quest SDK (OVR) - Automatically installed via Unity Package Manager
 - Meta Quest headset (Quest 2, Quest Pro, Quest 3)
 - Basic knowledge of Unity and C#
+
+**Note**: The Meta XR SDK is not included in this repository. It will be automatically downloaded and installed by Unity when you open the project, based on the package dependencies defined in `Packages/manifest.json`.
 
 ### Project Structure
 
