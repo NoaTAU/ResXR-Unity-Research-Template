@@ -44,10 +44,21 @@ RightEye_IsValid                           <- state.EyeGazes[(int)OVRPlugin.Eye.
 RightEye_Confidence                        <- state.EyeGazes[(int)OVRPlugin.Eye.Right].Confidence     (string)
 Eyes_Time                                  <- state.Time   (double, seconds; shared timestamp for both eyes)
 
-# - Recenter flags (system) -
-# [Collector: RecenterCollector]
-shouldRecenter                             <- OVRPlugin.shouldRecenter                                (0/1 if OVRPlugin.shouldRecenter available. else empty to indicate its not reading from OVRPlugin)
-recenterEvent                              <- Derived: rising edge of shouldRecenter                  (1 only on the first frame where shouldRecenter changes 0->1; otherwise 0, empty when OVRPlugin.shouldRecenter isn't available)
+# - System Status (recenter, tracking space, user presence, tracking loss) -
+# [Collector: SystemStatusCollector]
+# NOTE: Collector renamed from RecenterCollector
+shouldRecenter                             <- OVRPlugin.shouldRecenter                                (0/1 if available, else empty)
+recenterEvent                              <- Derived: rising edge of shouldRecenter                  (1 only on frame where shouldRecenter changes 0->1; otherwise 0)
+RecenterCount                              <- OVRPlugin.GetLocalTrackingSpaceRecenterCount()         (int, cumulative counter increments on each recenter)
+TrackingOriginChange_Event                 <- OVRManager.TrackingOriginChangePending event           (0/1, pulse on recenter event - most precise detection)
+TrackingOriginChange_PrevPose_px/_py/_pz   <- Event: poseInPreviousSpace.Position.{x,y,z}            [converted to world space]
+TrackingOriginChange_PrevPose_qx/_qy/_qz/_qw <- Event: poseInPreviousSpace.Orientation.{x,y,z,w}    [converted to world space]
+                                              (previous tracking origin pose before recenter, only written when event fires)
+TrackingTransform_px/_py/_pz               <- GetTrackingTransformRawPose().Position.{x,y,z}         [converted to world space]
+TrackingTransform_qx/_qy/_qz/_qw           <- GetTrackingTransformRawPose().Orientation.{x,y,z,w}    [converted to world space]
+                                              (tracking space origin pose in world coordinates; polled every frame)
+UserPresent                                <- OVRPlugin.userPresent                                   (0/1, true when user wears headset)
+TrackingLost                               <- !GetNodePositionTracked(Node.EyeCenter)                (0/1, true when SLAM tracking is lost)
 
 # - Device nodes -
 # [Collector: OVRNodesCollector]

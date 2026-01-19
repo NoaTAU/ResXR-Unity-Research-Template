@@ -22,7 +22,7 @@ namespace ResXRData
         Body,
         Performance,
         GazeLegacy,
-        Recenter,
+        SystemStatus,  // RENAMED from Recenter
         Custom,
         FaceBase,
         FaceExpressions,
@@ -106,7 +106,7 @@ namespace ResXRData
             AddIfExists(LiveColumnGroupKind.Body);
             AddIfExists(LiveColumnGroupKind.Performance);
             AddIfExists(LiveColumnGroupKind.GazeLegacy);
-            AddIfExists(LiveColumnGroupKind.Recenter);
+            AddIfExists(LiveColumnGroupKind.SystemStatus);
             AddIfExists(LiveColumnGroupKind.Custom);
             AddIfExists(LiveColumnGroupKind.Other);
 
@@ -167,9 +167,13 @@ namespace ResXRData
             if (name == "AppMotionToPhotonLatency")
                 return LiveColumnGroupKind.Performance;
 
-            // Recenter
-            if (name == "shouldRecenter" || name == "recenterEvent")
-                return LiveColumnGroupKind.Recenter;
+            // System status (consolidated - renamed from Recenter)
+            if (name == "shouldRecenter" || name == "recenterEvent" ||
+                name == "RecenterCount" ||
+                name.StartsWith("TrackingOriginChange_", StringComparison.Ordinal) ||
+                name.StartsWith("TrackingTransform_", StringComparison.Ordinal) ||
+                name == "UserPresent" || name == "TrackingLost")
+                return LiveColumnGroupKind.SystemStatus;  // RENAMED from Recenter
 
             // Custom transforms
             if (name.StartsWith("Custom_", StringComparison.Ordinal))
@@ -190,7 +194,6 @@ namespace ResXRData
                         g.Summary.Add(idx);
                 }
             }
-
 
             // Eyes summary (dedicated block)
             AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_qx");
@@ -232,9 +235,13 @@ namespace ResXRData
 
             // Performance summary (AppMotionToPhotonLatency removed)
 
-            // Recenter summary (all of them)
-            AddIfExists(LiveColumnGroupKind.Recenter, "shouldRecenter");
-            AddIfExists(LiveColumnGroupKind.Recenter, "recenterEvent");
+            // System status summary (group renamed from Recenter)
+            AddIfExists(LiveColumnGroupKind.SystemStatus, "shouldRecenter");
+            AddIfExists(LiveColumnGroupKind.SystemStatus, "recenterEvent");
+            AddIfExists(LiveColumnGroupKind.SystemStatus, "RecenterCount"); // NEW
+            AddIfExists(LiveColumnGroupKind.SystemStatus, "TrackingOriginChange_Event"); // NEW
+            AddIfExists(LiveColumnGroupKind.SystemStatus, "UserPresent"); // NEW
+            AddIfExists(LiveColumnGroupKind.SystemStatus, "TrackingLost"); // NEW
 
             // Custom summary: first few Custom_ columns (if any)
             if (byKind.TryGetValue(LiveColumnGroupKind.Custom, out var custom) && custom.Summary.Count == 0)
@@ -340,7 +347,7 @@ namespace ResXRData
                 case LiveColumnGroupKind.Body: return "Body";
                 case LiveColumnGroupKind.Performance: return "Performance";
                 case LiveColumnGroupKind.GazeLegacy: return "Gaze (Legacy)";
-                case LiveColumnGroupKind.Recenter: return "Recenter";
+                case LiveColumnGroupKind.SystemStatus: return "System Status";  // RENAMED from Recenter
                 case LiveColumnGroupKind.Custom: return "Custom Transforms";
                 case LiveColumnGroupKind.FaceBase: return "Face Base";
                 case LiveColumnGroupKind.FaceExpressions: return "Face Expressions";

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;                  // Debug.LogWarning
+using UnityEngine.Serialization;    // FormerlySerializedAs
 using static OVRPlugin;             // runtime skeleton detection
 
 namespace ResXRData
@@ -87,7 +88,10 @@ namespace ResXRData
         public bool includeBody = true;         // Body skeleton arrays
         public bool includePerformance = true;         // AppMotionToPhotonLatency
         public bool includeGaze = true;         // FocusedObject, EyeGazeHitPosition
-        public bool includeRecenter = true;     // shouldRecenter, recenterEvent
+        
+        [FormerlySerializedAs("includeRecenter")]
+        [Tooltip("System status: recenter detection (shouldRecenter, recenterEvent, RecenterCount, TrackingOriginChange event+pose), tracking space transform (TrackingTransform_*), user presence (UserPresent), tracking loss (TrackingLost)")]
+        public bool includeSystemStatus = true;     // RENAMED from includeRecenter
 
         // Researchers can drag Transforms in the inspector
         public List<Transform> customTransformsToRecord = new();
@@ -228,11 +232,26 @@ namespace ResXRData
                 schemaBuilder.Add("Eyes_Time");
             }
 
-            // Recenter flags
-            if (recordingOptions.includeRecenter)
+            // System status (recenter, tracking space, user presence, tracking loss)
+            if (recordingOptions.includeSystemStatus)
             {
+                // Recenter detection (existing + new)
                 schemaBuilder.Add("shouldRecenter");
                 schemaBuilder.Add("recenterEvent");
+                schemaBuilder.Add("RecenterCount");
+                
+                // Recenter event with pose delta (NEW)
+                schemaBuilder.Add("TrackingOriginChange_Event");
+                schemaBuilder.AddMany("TrackingOriginChange_PrevPose", new[] { "px", "py", "pz" });
+                schemaBuilder.AddMany("TrackingOriginChange_PrevPose", new[] { "qx", "qy", "qz", "qw" });
+                
+                // Tracking space transform
+                schemaBuilder.AddMany("TrackingTransform", new[] { "px", "py", "pz" });
+                schemaBuilder.AddMany("TrackingTransform", new[] { "qx", "qy", "qz", "qw" });
+                
+                // User presence & tracking loss
+                schemaBuilder.Add("UserPresent");
+                schemaBuilder.Add("TrackingLost");
             }
 
             // Device nodes

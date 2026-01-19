@@ -32,7 +32,7 @@ Continuous
     - FlagsOnly
     - ValuesOnly
     - Time
-  - Recenter
+  - SystemStatus
     - FlagsOnly
     - ValuesOnly
     - Time
@@ -70,9 +70,9 @@ Continuous / Other / Time: (none)
 Continuous / Performance / FlagsOnly: (none)
 Continuous / Performance / ValuesOnly: (none - AppMotionToPhotonLatency removed)
 Continuous / Performance / Time: (none)
-Continuous / Recenter / FlagsOnly: shouldRecenter, recenterEvent
-Continuous / Recenter / ValuesOnly: (none)
-Continuous / Recenter / Time: (none)
+Continuous / SystemStatus / FlagsOnly: shouldRecenter, recenterEvent, TrackingOriginChange_Event, UserPresent, TrackingLost
+Continuous / SystemStatus / ValuesOnly: RecenterCount, TrackingOriginChange_PrevPose_px, TrackingOriginChange_PrevPose_py, TrackingOriginChange_PrevPose_pz, TrackingOriginChange_PrevPose_qx, TrackingOriginChange_PrevPose_qy, TrackingOriginChange_PrevPose_qz, TrackingOriginChange_PrevPose_qw, TrackingTransform_px, TrackingTransform_py, TrackingTransform_pz, TrackingTransform_qx, TrackingTransform_qy, TrackingTransform_qz, TrackingTransform_qw
+Continuous / SystemStatus / Time: (none)
 Face / FaceBase / FlagsOnly: Face_Status, FaceRegionConfidence_Upper, FaceRegionConfidence_Lower
 Face / FaceBase / ValuesOnly: timeSinceStartup
 Face / FaceBase / Time: Face_Time

@@ -143,8 +143,6 @@ namespace ResXRData
             else
             {
                 _rootDir = Application.persistentDataPath;
-                //_rootDir = Path.Combine(Application.persistentDataPath, outputFolderName);
-                //Directory.CreateDirectory(_rootDir);
             }
 
             // 2) Metadata
@@ -192,7 +190,7 @@ namespace ResXRData
             if (recordingOptions.includeEyes) _continuousCollectors.Add(new OVREyesCollector());
             if (recordingOptions.includeHands) _continuousCollectors.Add(new OVRHandsCollector());
             if (recordingOptions.includeBody) _continuousCollectors.Add(new OVRBodyCollector());
-            if (recordingOptions.includeRecenter) _continuousCollectors.Add(new RecenterCollector());
+            if (recordingOptions.includeSystemStatus) _continuousCollectors.Add(new SystemStatusCollector());
             if (recordingOptions.includePerformance) _continuousCollectors.Add(new OVRPerformanceCollector());
             if (recordingOptions.customTransformsToRecord != null &&
                 recordingOptions.customTransformsToRecord.Count > 0)
