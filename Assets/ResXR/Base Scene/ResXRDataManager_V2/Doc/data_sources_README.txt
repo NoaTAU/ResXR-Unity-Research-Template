@@ -21,20 +21,6 @@ timeSinceStartup                          <- Unity: Time.realTimeSinceStartup
 # Hand bones remain in hand-local space (relative to hand root).
 # ============================================================
 
-# - Legacy head pose (Euler) from Head node -
-# [Collector: OVRNodesCollector]
-Head_Position_x                            <- OVRPlugin.GetNodePose(node, step).Posef.Position.x  [converted to world space]
-Head_Height                                <- ...Position.y  [converted to world space]
-Head_Position_Z                            <- ...Position.z  [converted to world space]
-Gaze_Pitch                                 <- Node.Head Posef.Orientation <- Euler.x (degrees)  [converted to world space]
-Gaze_Yaw                                   <- ...Euler.y  [converted to world space]
-Gaze_Roll                                  <- ...Euler.z  [converted to world space]
-HeadNodeOrientationValid                   <- OVRPlugin.GetNodeOrientationValid(Node.Head)           (0/1)
-HeadNodePositionValid                      <- OVRPlugin.GetNodePositionValid(Node.Head)              (0/1)
-HeadNodeOrientationTracked                 <- OVRPlugin.GetNodeOrientationTracked(Node.Head)         (0/1)
-HeadNodePositionTracked                    <- OVRPlugin.GetNodePositionTracked(Node.Head)            (0/1)
-HeadNodeTime                               <- from GetNodePoseStateRaw(<Node>, step).Time
-
 # - Legacy gaze hit point/raycast  -
 # [Collector: OVREyesCollector]
 FocusedObject                              <- ResXRPlayer.Instance.FocusedObject (GameObject name or "none")
@@ -63,18 +49,21 @@ Eyes_Time                                  <- state.Time   (double, seconds; sha
 shouldRecenter                             <- OVRPlugin.shouldRecenter                                (0/1 if OVRPlugin.shouldRecenter available. else empty to indicate its not reading from OVRPlugin)
 recenterEvent                              <- Derived: rising edge of shouldRecenter                  (1 only on the first frame where shouldRecenter changes 0->1; otherwise 0, empty when OVRPlugin.shouldRecenter isn't available)
 
-# - Device nodes (for each <Node> in order: EyeLeft, EyeRight, EyeCenter, Head, HandLeft, HandRight, ControllerLeft, ControllerRight) -
+# - Device nodes -
 # [Collector: OVRNodesCollector]
+# For each node, the following fields are collected:
 Node_<Node>_Present                        <- OVRPlugin.GetNodePresent(<Node>)                        (0/1)
 Node_<Node>_px / _py / _pz                 <- GetNodePose(<Node>, step).Position.{x,y,z}  [converted to world space]
 Node_<Node>_qx / _qy / _qz / _qw           <- ...Posef.Orientation.{x,y,z,w}  [converted to world space]
-Node_<Node>_Vel_x / _Vel_y / _Vel_z        <- OVRPlugin.GetNodeVelocity(<Node>, step).{x,y,z}  [converted to world space]
-Node_<Node>_AngVel_x/_AngVel_y/_AngVel_z   <- OVRPlugin.GetNodeAngularVelocity(<Node>, step).{x,y,z}  [converted to world space]
+                                              (collected for: EyeCenter, Head, HandLeft, HandRight, ControllerLeft, ControllerRight)
 Node_<Node>_Valid_Position                 <- OVRPlugin.GetNodePositionValid(<Node>)                  (0/1)
 Node_<Node>_Valid_Orientation              <- OVRPlugin.GetNodeOrientationValid(<Node>)               (0/1)
 Node_<Node>_Tracked_Position               <- OVRPlugin.GetNodePositionTracked(<Node>)                (0/1)
 Node_<Node>_Tracked_Orientation            <- OVRPlugin.GetNodeOrientationTracked(<Node>)             (0/1)
 Node_<Node>_Time                           <- from GetNodePoseStateRaw(<Node>, step).Time
+
+# Node list: EyeCenter, Head, HandLeft, HandRight, ControllerLeft, ControllerRight
+# (EyeLeft, EyeRight removed - use dedicated eye gaze API from OVREyesCollector instead)
 
 # - Hands (dedicated API; LEFT then RIGHT) -
 # [Collector: OVRHandsCollector]
@@ -90,6 +79,12 @@ LeftHand_FingerConf_Ring                   <- HandState.FingerConfidences[Ring]
 LeftHand_FingerConf_Pinky                  <- HandState.FingerConfidences[Pinky]
 LeftHand_RequestedTS                       <- HandState.RequestedTimeStamp
 LeftHand_SampleTS                          <- HandState.SampleTimeStamp
+
+# NOTE ON HAND ROOT vs PALM BONE:
+# - LeftHand_Root represents the hand root pose in WORLD SPACE (converted from tracking space)
+# - Left_XRHand_Palm (bone[0] below) represents the same physical pose but in HAND-LOCAL SPACE (relative to root)
+# - The Palm bone in local space will typically be at origin (0,0,0) with identity rotation since it IS the root
+# - Both Node_HandLeft and LeftHand_Root provide world-space hand pose but may differ slightly (different APIs)
 
 # Per-bone (columns named by SDK BoneId enum; order = SDK bone enum order)
 Left_<BoneName>_x/_y/_z                    <- HandState.BonePositions[boneIndex].{x,y,z}  (e.g., Left_Hand_Thumb0_x or Left_XRHand_Thumb_Metacarpal_x)  [hand-local space]
@@ -109,10 +104,6 @@ Body_SkeletonChangedCount                   <- state.SkeletonChangedCount
 <Body_JointName>_px/_py/_pz                          <- state.JointLocations[jointIndex].Pose.Position.{x,y,z}  (e.g., Body_Root_px, Body_Hips_px)  [converted to world space]
 <Body_JointName>_qx/_qy/_qz/_qw                      <- state.JointLocations[jointIndex].Pose.Orientation.{x,y,z,w}  [converted to world space]
 <Body_JointName>_Flags                               <- state.JointLocations[jointIndex].LocationFlags  (bitfield)
-
-# - Perf -
-# [Collector: OVRPerformanceCollector]
-AppMotionToPhotonLatency                    <- OVRPlugin.GetAppPerfStats().FrameStats[last].AppMotionToPhotonLatency (seconds, if available)
 
 # - Custom transforms (experiment-specific; registered order) -
 # [Collector: CustomTransformsCollector]

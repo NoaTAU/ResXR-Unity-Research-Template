@@ -209,20 +209,6 @@ namespace ResXRData
             // Timing
             schemaBuilder.Add("timeSinceStartup"); // Unity Time.realTimeSinceStartup
 
-            // Legacy head pose (Euler) from Head node
-            if (recordingOptions.includeNodes)
-            {
-                schemaBuilder.Add("Head_Position_x");
-                schemaBuilder.Add("Head_Height");
-                schemaBuilder.Add("Head_Position_z");
-                schemaBuilder.AddMany("Gaze", new[] { "Pitch", "Yaw", "Roll" });
-                schemaBuilder.Add("HeadNodeOrientationValid");
-                schemaBuilder.Add("HeadNodePositionValid");
-                schemaBuilder.Add("HeadNodeOrientationTracked");
-                schemaBuilder.Add("HeadNodePositionTracked");
-                schemaBuilder.Add("HeadNodeTime");
-            }
-
             // Legacy gaze / raycast
             if (recordingOptions.includeGaze)
             {
@@ -252,9 +238,10 @@ namespace ResXRData
             // Device nodes
             if (recordingOptions.includeNodes)
             {
+                // EyeLeft, EyeRight removed - use dedicated eye gaze API (OVREyesCollector) instead
                 string[] nodeNames =
                 {
-                    "EyeLeft","EyeRight","EyeCenter","Head",
+                    "EyeCenter","Head",
                     "HandLeft","HandRight","ControllerLeft","ControllerRight"
                 };
 
@@ -263,8 +250,9 @@ namespace ResXRData
                     schemaBuilder.Add($"Node_{node}_Present");
                     schemaBuilder.AddMany($"Node_{node}", new[] { "px", "py", "pz" });
                     schemaBuilder.AddMany($"Node_{node}", new[] { "qx", "qy", "qz", "qw" });
-                    schemaBuilder.AddMany($"Node_{node}_Vel", new[] { "x", "y", "z" });
-                    schemaBuilder.AddMany($"Node_{node}_AngVel", new[] { "x", "y", "z" });
+                    
+                    // Velocity/AngularVelocity removed for all nodes
+                    
                     schemaBuilder.Add($"Node_{node}_Valid_Position");
                     schemaBuilder.Add($"Node_{node}_Valid_Orientation");
                     schemaBuilder.Add($"Node_{node}_Tracked_Position");
@@ -337,9 +325,7 @@ namespace ResXRData
                 }
             }
 
-            // Perf
-            if (recordingOptions.includePerformance)
-                schemaBuilder.Add("AppMotionToPhotonLatency");
+            // Perf - AppMotionToPhotonLatency removed (keep OVRPerformanceCollector for future metrics)
 
             // Custom transforms (from inspector)
             if (recordingOptions.customTransformsToRecord != null)

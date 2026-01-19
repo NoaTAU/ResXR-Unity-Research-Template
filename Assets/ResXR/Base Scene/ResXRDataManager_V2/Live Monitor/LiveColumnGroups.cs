@@ -191,14 +191,6 @@ namespace ResXRData
                 }
             }
 
-            // Nodes summary
-            AddIfExists(LiveColumnGroupKind.Nodes, "Head_Position_x");
-            AddIfExists(LiveColumnGroupKind.Nodes, "Head_Height");
-            AddIfExists(LiveColumnGroupKind.Nodes, "Head_Position_z");
-            AddIfExists(LiveColumnGroupKind.Nodes, "Gaze_Pitch");
-            AddIfExists(LiveColumnGroupKind.Nodes, "Gaze_Yaw");
-            AddIfExists(LiveColumnGroupKind.Nodes, "Gaze_Roll");
-            AddIfExists(LiveColumnGroupKind.Nodes, "HeadNodeTime");
 
             // Eyes summary (dedicated block)
             AddIfExists(LiveColumnGroupKind.Eyes, "LeftEye_qx");
@@ -238,8 +230,7 @@ namespace ResXRData
             AddIfExists(LiveColumnGroupKind.Body, "Body_CalibrationStatus");
             AddIfExists(LiveColumnGroupKind.Body, "Body_SkeletonChangedCount");
 
-            // Performance summary
-            AddIfExists(LiveColumnGroupKind.Performance, "AppMotionToPhotonLatency");
+            // Performance summary (AppMotionToPhotonLatency removed)
 
             // Recenter summary (all of them)
             AddIfExists(LiveColumnGroupKind.Recenter, "shouldRecenter");

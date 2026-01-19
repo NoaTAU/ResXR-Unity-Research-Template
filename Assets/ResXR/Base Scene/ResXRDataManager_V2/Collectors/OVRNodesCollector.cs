@@ -1,5 +1,5 @@
 // OVRNodesCollector.cs
-// Collects legacy head pose (Euler) and device node pose/vel/validity blocks.
+// Collects node pose/validity blocks. [nodes: EyeCenter, Head, HandLeft, HandRight, ControllerLeft, ControllerRight. removed eyeleft, eyeright - use dedicated eye gaze collector instead]
 
 using System;
 using System.Collections.Generic;
@@ -14,48 +14,26 @@ namespace ResXRData
         public string CollectorName => "OVRNodesCollector";
         private const Step SampleStep = OvrSampling.StepDefault;
 
-        // Legacy head pose block
-        private int _idxHeadPosX = -1, _idxHeadHeight = -1, _idxHeadPosZ = -1;
-        private int _idxGazePitch = -1, _idxGazeYaw = -1, _idxGazeRoll = -1;
-        private int _idxHeadOrientValid = -1, _idxHeadPosValid = -1;
-        private int _idxHeadOrientTracked = -1, _idxHeadPosTracked = -1;
-        private int _idxHeadNodeTime = -1;
-
         private struct NodeCols
         {
             public int Present;
             public int PosX, PosY, PosZ;
             public int Qx, Qy, Qz, Qw;
-            public int VelX, VelY, VelZ;
-            public int AngVelX, AngVelY, AngVelZ;
             public int ValidPos, ValidOrient, TrackedPos, TrackedOrient;
             public int Time;
         }
 
         private readonly Dictionary<Node, NodeCols> _nodeCols = new Dictionary<Node, NodeCols>();
-        private static readonly Node[] NodeOrder =
+        
+        private static readonly Node[] NodeOrder = 
         {
-            Node.EyeLeft, Node.EyeRight, Node.EyeCenter, Node.Head,
+            Node.EyeCenter, Node.Head,
             Node.HandLeft, Node.HandRight, Node.ControllerLeft, Node.ControllerRight
-        };
+        }; // EyeLeft, EyeRight removed - use dedicated eye gaze API instead
 
         public void Configure(ColumnIndex schema, RecordingOptions options)
         {
             if (schema == null) throw new ArgumentNullException(nameof(schema));
-
-            TryIndex(schema, "Head_Position_x", out _idxHeadPosX);
-            TryIndex(schema, "Head_Height", out _idxHeadHeight);
-            TryIndex(schema, "Head_Position_z", out _idxHeadPosZ);
-
-            TryIndex(schema, "Gaze_Pitch", out _idxGazePitch);
-            TryIndex(schema, "Gaze_Yaw", out _idxGazeYaw);
-            TryIndex(schema, "Gaze_Roll", out _idxGazeRoll);
-
-            TryIndex(schema, "HeadNodeOrientationValid", out _idxHeadOrientValid);
-            TryIndex(schema, "HeadNodePositionValid", out _idxHeadPosValid);
-            TryIndex(schema, "HeadNodeOrientationTracked", out _idxHeadOrientTracked);
-            TryIndex(schema, "HeadNodePositionTracked", out _idxHeadPosTracked);
-            TryIndex(schema, "HeadNodeTime", out _idxHeadNodeTime);
 
             _nodeCols.Clear();
             foreach (Node node in NodeOrder)
@@ -74,14 +52,6 @@ namespace ResXRData
                     Qz = IndexOrMinusOne(schema, $"{baseName}_qz"),
                     Qw = IndexOrMinusOne(schema, $"{baseName}_qw"),
 
-                    VelX = IndexOrMinusOne(schema, $"{baseName}_Vel_x"),
-                    VelY = IndexOrMinusOne(schema, $"{baseName}_Vel_y"),
-                    VelZ = IndexOrMinusOne(schema, $"{baseName}_Vel_z"),
-
-                    AngVelX = IndexOrMinusOne(schema, $"{baseName}_AngVel_x"),
-                    AngVelY = IndexOrMinusOne(schema, $"{baseName}_AngVel_y"),
-                    AngVelZ = IndexOrMinusOne(schema, $"{baseName}_AngVel_z"),
-
                     ValidPos = IndexOrMinusOne(schema, $"{baseName}_Valid_Position"),
                     ValidOrient = IndexOrMinusOne(schema, $"{baseName}_Valid_Orientation"),
                     TrackedPos = IndexOrMinusOne(schema, $"{baseName}_Tracked_Position"),
@@ -95,35 +65,6 @@ namespace ResXRData
 
         public void Collect(RowBuffer row, float timeSinceStartup)
         {
-            // ----- Legacy head pose (Euler from quaternion) -----
-            Posef headPose = GetNodePose(Node.Head, SampleStep); // Posef (no time)
-            
-            // Convert tracking space to world space
-            Vector3 headWorldPos = TrackingSpaceConverter.ToWorldSpacePosition(headPose);
-            SetIfValid(row, _idxHeadPosX, headWorldPos.x);
-            SetIfValid(row, _idxHeadHeight, headWorldPos.y);
-            SetIfValid(row, _idxHeadPosZ, headWorldPos.z);
-
-            // Convert orientation to world space, then calculate Euler
-            Quaternion qHeadWorld = TrackingSpaceConverter.ToWorldSpaceRotation(headPose.Orientation);
-            Vector3 euler = qHeadWorld.eulerAngles;
-            SetIfValid(row, _idxGazePitch, euler.x);
-            SetIfValid(row, _idxGazeYaw, euler.y);
-            SetIfValid(row, _idxGazeRoll, euler.z);
-
-            bool headPosValid = GetNodePositionValid(Node.Head);
-            bool headOrientValid = GetNodeOrientationValid(Node.Head);
-            bool headPosTracked = GetNodePositionTracked(Node.Head);
-            bool headOrientTracked = GetNodeOrientationTracked(Node.Head);
-            SetIfValid(row, _idxHeadPosValid, headPosValid ? 1 : 0);
-            SetIfValid(row, _idxHeadOrientValid, headOrientValid ? 1 : 0);
-            SetIfValid(row, _idxHeadPosTracked, headPosTracked ? 1 : 0);
-            SetIfValid(row, _idxHeadOrientTracked, headOrientTracked ? 1 : 0);
-
-            // Per-node precise timestamp (PoseStatef.Time) via GetNodePoseStateRaw
-            PoseStatef headState = GetNodePoseStateRaw(Node.Head, SampleStep); // has .Time 
-            SetIfValid(row, _idxHeadNodeTime, headState.Time);
-
             // ----- Per-node block -----
             foreach (KeyValuePair<Node, NodeCols> pair in _nodeCols)
             {
@@ -147,19 +88,7 @@ namespace ResXRData
                 SetIfValid(row, cols.Qz, worldRot.z);
                 SetIfValid(row, cols.Qw, worldRot.w);
 
-                // Convert velocity to world space (rotation only, no offset)
-                Vector3f vel = GetNodeVelocity(node, SampleStep);
-                Vector3 worldVel = TrackingSpaceConverter.RotateVectorToWorldSpace(vel);
-                SetIfValid(row, cols.VelX, worldVel.x);
-                SetIfValid(row, cols.VelY, worldVel.y);
-                SetIfValid(row, cols.VelZ, worldVel.z);
-
-                // Convert angular velocity to world space (rotation only, no offset)
-                Vector3f angVel = GetNodeAngularVelocity(node, SampleStep);
-                Vector3 worldAngVel = TrackingSpaceConverter.RotateVectorToWorldSpace(angVel);
-                SetIfValid(row, cols.AngVelX, worldAngVel.x);
-                SetIfValid(row, cols.AngVelY, worldAngVel.y);
-                SetIfValid(row, cols.AngVelZ, worldAngVel.z);
+                // Velocity/AngularVelocity collection removed (not in schema)
 
                 bool validPos = GetNodePositionValid(node);
                 bool validOrient = GetNodeOrientationValid(node);
