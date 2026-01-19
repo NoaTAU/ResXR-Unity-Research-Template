@@ -270,9 +270,12 @@ public void UpdateEyeTracker()  // Update eye tracking (called every frame)
 **How It Works**:
 1. Uses `OVREyeGaze` component on right eye
 2. Checks confidence threshold (default: 0.5)
-3. Casts ray from midpoint between eyes forward
-4. Detects focused object via raycast
-5. Returns hit position and focused transform
+3. Computes a cyclopean (binocular) gaze ray:
+   - Origin: midpoint between left and right eye positions
+   - Direction: normalized sum of left and right gaze directions
+4. Casts ray using this cyclopean gaze direction
+5. Detects focused object via raycast
+6. Returns hit position and focused transform
 
 **Usage Example**:
 ```csharp

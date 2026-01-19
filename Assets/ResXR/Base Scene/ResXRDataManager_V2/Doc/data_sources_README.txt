@@ -24,6 +24,11 @@ timeSinceStartup                          <- Unity: Time.realTimeSinceStartup   
 
 # - Legacy gaze hit point/raycast  -
 # [Collector: OVREyesCollector]
+# NOTE: Uses a cyclopean (binocular) gaze ray computation:
+#   - Origin: midpoint between left and right eye positions
+#   - Direction: normalized sum of left and right gaze directions
+# Per-eye data (RightEye_qx/qy/qz/qw, LeftEye_qx/qy/qz/qw) are logged separately
+# to allow offline recomputation (e.g., vergence-based focus).
 FocusedObject                              <- ResXRPlayer.Instance.FocusedObject                      (string: GameObject name or empty "")
 EyeGazeHitPosition_X                       <- ResXRPlayer.Instance.EyeGazeHitPosition.x  [world space]
 EyeGazeHitPosition_Y                       <- ResXRPlayer.Instance.EyeGazeHitPosition.y  [world space]

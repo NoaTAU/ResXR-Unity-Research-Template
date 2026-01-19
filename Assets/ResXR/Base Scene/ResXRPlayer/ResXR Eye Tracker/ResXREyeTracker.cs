@@ -51,18 +51,29 @@ public class ResXREyeTracker : MonoBehaviour
         }
 
 
-        // cast from middle eye
+        // We compute a cyclopean (binocular) gaze ray.
+        // Origin: midpoint between left and right eye positions.
+        // Direction: normalized sum of left and right gaze directions.
+        //
+        // This avoids lateral parallax introduced by using a single-eye direction
+        // from a midpoint origin, and reduces monocular noise.
+        // Per-eye data are logged to allow offline recomputation (e.g., vergence-based focus).
         _eyePosition = (_rightEye.position + _leftEye.position) / 2;
 
-        //TODO: try using average of both eyes forward
-        // eye forward is same for both eyes.
-        Vector3 eyeForward = _rightEye.forward;
+        Vector3 eyeForward = (_rightEye.forward + _leftEye.forward).normalized;
+
+
+        // Fallback: if binocular direction averaging becomes unstable (near-zero magnitude),
+        // we revert to a monocular gaze direction.
+        // This avoids propagating invalid vectors while preserving a valid gaze ray
+        // when only one eye provides reliable tracking.
+
+        if (eyeForward.sqrMagnitude < 1e-6f)
+            eyeForward = _rightEye.forward;
 
         RaycastHit hit;
         if (Physics.Raycast(_eyePosition, eyeForward, out hit, EYERAYMAXLENGTH, _eyeTrackingLayerMask))
         {
-            //Use interface:
-            //(_focusedObject as ILookedAt)?.LookedAt();
             _focusedObject = hit.transform;
             _eyeGazeHitPosition = hit.point;
         }
@@ -72,6 +83,6 @@ public class ResXREyeTracker : MonoBehaviour
             _eyeGazeHitPosition = NOTTRACKINGVECTORVALUE;
         }
 
-        Debug.DrawRay(_eyePosition, eyeForward, Color.red);
+        Debug.DrawRay(_eyePosition, eyeForward * 2f , Color.red);
     }
 }
