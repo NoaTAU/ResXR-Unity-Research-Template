@@ -15,12 +15,16 @@ namespace ResXRData
 
         private struct HandCols
         {
-            public int Status;
+            // Hand Status: 5 flag columns instead of single string column
+            public int[] StatusFlags; // [HandTracked, InputStateValid, SystemGestureInProgress, DominantHand, MenuPressed]
+            
             public int RootPosX, RootPosY, RootPosZ;
             public int RootQx, RootQy, RootQz, RootQw;
             public int HandScale;
+            // Hand Confidence: single column, will write 0/1 (0=Low, 1=High) instead of string
             public int HandConfidence;
 
+            // Finger Confidence: single columns, will write 0/1 (0=Low, 1=High) instead of string
             public int ConfThumb, ConfIndex, ConfMiddle, ConfRing, ConfPinky;
 
             public int RequestedTs;
@@ -83,7 +87,13 @@ namespace ResXRData
                 Debug.LogError($"[SchemaFactories] Hand bone names detection failed or count mismatch. Detected count: {_handBoneCount}, Names count: {handBoneNames.Length}");
             }
 
-            cols.Status = IndexOrMinusOne(schema, $"{side}Hand_Status");
+            // Cache indices for Hand Status flags (5 columns)
+            cols.StatusFlags = new int[5];
+            cols.StatusFlags[0] = IndexOrMinusOne(schema, $"{side}Hand_Status_HandTracked");
+            cols.StatusFlags[1] = IndexOrMinusOne(schema, $"{side}Hand_Status_InputStateValid");
+            cols.StatusFlags[2] = IndexOrMinusOne(schema, $"{side}Hand_Status_SystemGestureInProgress");
+            cols.StatusFlags[3] = IndexOrMinusOne(schema, $"{side}Hand_Status_DominantHand");
+            cols.StatusFlags[4] = IndexOrMinusOne(schema, $"{side}Hand_Status_MenuPressed");
 
             cols.RootPosX = IndexOrMinusOne(schema, $"{side}Hand_Root_px");
             cols.RootPosY = IndexOrMinusOne(schema, $"{side}Hand_Root_py");
@@ -138,7 +148,12 @@ namespace ResXRData
             bool got = GetHandState(SampleStep, whichHand, ref handState);
             if (!got) return;
 
-            SetIfValid(row, cols.Status, handState.Status.ToString());
+            // Parse Hand Status flags and write to individual flag columns
+            bool[] statusFlags = ParseHandStatusFlags(handState.Status);
+            for (int i = 0; i < statusFlags.Length && i < cols.StatusFlags.Length; i++)
+            {
+                SetIfValid(row, cols.StatusFlags[i], statusFlags[i] ? 1 : 0);
+            }
 
             // Convert hand root pose to world space
             Posef root = handState.RootPose;
@@ -154,16 +169,17 @@ namespace ResXRData
             SetIfValid(row, cols.RootQw, rootWorldRot.w);
 
             SetIfValid(row, cols.HandScale, handState.HandScale);
-            SetIfValid(row, cols.HandConfidence, handState.HandConfidence.ToString());
+            // Hand Confidence: Convert to binary (0=Low, 1=High) instead of string
+            SetIfValid(row, cols.HandConfidence, ParseTrackingConfidenceToBinary(handState.HandConfidence));
 
-            // Finger confidences (array of 5)
+            // Finger confidences: Convert to binary (0=Low, 1=High) instead of string
             if (handState.FingerConfidences != null && handState.FingerConfidences.Length >= 5)
             {
-                SetIfValid(row, cols.ConfThumb, handState.FingerConfidences[0].ToString());
-                SetIfValid(row, cols.ConfIndex, handState.FingerConfidences[1].ToString());
-                SetIfValid(row, cols.ConfMiddle, handState.FingerConfidences[2].ToString());
-                SetIfValid(row, cols.ConfRing, handState.FingerConfidences[3].ToString());
-                SetIfValid(row, cols.ConfPinky, handState.FingerConfidences[4].ToString());
+                SetIfValid(row, cols.ConfThumb, ParseTrackingConfidenceToBinary(handState.FingerConfidences[0]));
+                SetIfValid(row, cols.ConfIndex, ParseTrackingConfidenceToBinary(handState.FingerConfidences[1]));
+                SetIfValid(row, cols.ConfMiddle, ParseTrackingConfidenceToBinary(handState.FingerConfidences[2]));
+                SetIfValid(row, cols.ConfRing, ParseTrackingConfidenceToBinary(handState.FingerConfidences[3]));
+                SetIfValid(row, cols.ConfPinky, ParseTrackingConfidenceToBinary(handState.FingerConfidences[4]));
             }
 
             // Timestamps (double)

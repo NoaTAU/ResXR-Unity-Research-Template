@@ -291,12 +291,20 @@ namespace ResXRData
 
                 foreach (string side in new[] { "Left", "Right" })
                 {
-                    schemaBuilder.Add($"{side}Hand_Status");
+                    // Hand Status: 5 flag columns instead of single string column
+                    schemaBuilder.Add($"{side}Hand_Status_HandTracked");
+                    schemaBuilder.Add($"{side}Hand_Status_InputStateValid");
+                    schemaBuilder.Add($"{side}Hand_Status_SystemGestureInProgress");
+                    schemaBuilder.Add($"{side}Hand_Status_DominantHand");
+                    schemaBuilder.Add($"{side}Hand_Status_MenuPressed");
+                    
                     schemaBuilder.AddMany($"{side}Hand_Root", new[] { "px", "py", "pz" });
                     schemaBuilder.AddMany($"{side}Hand_Root", new[] { "qx", "qy", "qz", "qw" });
                     schemaBuilder.Add($"{side}Hand_HandScale");
+                    // Hand Confidence: Keep same column name, but will write 0/1 (0=Low, 1=High) instead of string
                     schemaBuilder.Add($"{side}Hand_HandConfidence");
 
+                    // Finger Confidence: Keep same column names, but will write 0/1 (0=Low, 1=High) instead of string
                     schemaBuilder.Add($"{side}Hand_FingerConf_Thumb");
                     schemaBuilder.Add($"{side}Hand_FingerConf_Index");
                     schemaBuilder.Add($"{side}Hand_FingerConf_Middle");
@@ -322,8 +330,12 @@ namespace ResXRData
             {
                 schemaBuilder.Add("Body_Time");
                 schemaBuilder.Add("Body_Confidence");
+                // Body Fidelity: Keep same column name, but will write 0/1 (0=Low, 1=High) instead of string
                 schemaBuilder.Add("Body_Fidelity");
-                schemaBuilder.Add("Body_CalibrationStatus");
+                // Body Calibration Status: 3 flag columns instead of single string column
+                schemaBuilder.Add("Body_CalibrationStatus_Invalid");
+                schemaBuilder.Add("Body_CalibrationStatus_Calibrating");
+                schemaBuilder.Add("Body_CalibrationStatus_Valid");
                 schemaBuilder.Add("Body_SkeletonChangedCount");
 
                 string[] bodyJointNames = GetBodyJointNames();
@@ -339,7 +351,11 @@ namespace ResXRData
                         string jointName = bodyJointNames[jointIndex];
                         schemaBuilder.AddMany($"{jointName}", new[] { "px", "py", "pz" });
                         schemaBuilder.AddMany($"{jointName}", new[] { "qx", "qy", "qz", "qw" });
-                        schemaBuilder.Add($"{jointName}_Flags");
+                        // Joint Flags: 4 flag columns instead of single string column
+                        schemaBuilder.Add($"{jointName}_Flags_OrientationValid");
+                        schemaBuilder.Add($"{jointName}_Flags_PositionValid");
+                        schemaBuilder.Add($"{jointName}_Flags_OrientationTracked");
+                        schemaBuilder.Add($"{jointName}_Flags_PositionTracked");
                     }
                 }
             }

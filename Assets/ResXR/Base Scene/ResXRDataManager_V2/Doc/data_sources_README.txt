@@ -84,20 +84,21 @@ Node_<Node>_Time                           <- GetNodePoseStateRaw(<Node>, step).
 
 # - Hands (dedicated API; LEFT then RIGHT) -
 # [Collector: OVRHandsCollector]
-LeftHand_Status                            <- OVRPlugin.GetHandState(step, Hand.HandLeft).Status      (string: HandStatus flags enum)
-                                                                                                       Possible values: "HandTracked" (1), "InputStateValid" (2), 
-                                                                                                       "SystemGestureInProgress" (64), "DominantHand" (128), "MenuPressed" (256)
-                                                                                                       Can be combined (e.g., "HandTracked, InputStateValid")
+LeftHand_Status_HandTracked                <- OVRPlugin.GetHandState(step, Hand.HandLeft).Status      (bool as 0/1: HandTracked flag)
+LeftHand_Status_InputStateValid            <- OVRPlugin.GetHandState(step, Hand.HandLeft).Status      (bool as 0/1: InputStateValid flag)
+LeftHand_Status_SystemGestureInProgress    <- OVRPlugin.GetHandState(step, Hand.HandLeft).Status      (bool as 0/1: SystemGestureInProgress flag)
+LeftHand_Status_DominantHand               <- OVRPlugin.GetHandState(step, Hand.HandLeft).Status      (bool as 0/1: DominantHand flag)
+LeftHand_Status_MenuPressed                <- OVRPlugin.GetHandState(step, Hand.HandLeft).Status      (bool as 0/1: MenuPressed flag)
+                                                                                                       Note: Multiple flags can be 1 simultaneously (flags can be combined)
 LeftHand_Root_px/_py/_pz                   <- HandState.RootPose.Position.{x,y,z}                     [converted to world space]
 LeftHand_Root_qx/_qy/_qz/_qw               <- HandState.RootPose.Orientation.{x,y,z,w}                [converted to world space]
 LeftHand_HandScale                         <- HandState.HandScale
-LeftHand_HandConfidence                    <- HandState.HandConfidence                                (string: TrackingConfidence enum)
-                                                                                                       Possible values: "Low", "High"
-LeftHand_FingerConf_Thumb                  <- HandState.FingerConfidences[Thumb]                      (string: TrackingConfidence enum - "Low" or "High")
-LeftHand_FingerConf_Index                  <- HandState.FingerConfidences[Index]                      (string: TrackingConfidence enum - "Low" or "High")
-LeftHand_FingerConf_Middle                 <- HandState.FingerConfidences[Middle]                     (string: TrackingConfidence enum - "Low" or "High")
-LeftHand_FingerConf_Ring                   <- HandState.FingerConfidences[Ring]                       (string: TrackingConfidence enum - "Low" or "High")
-LeftHand_FingerConf_Pinky                  <- HandState.FingerConfidences[Pinky]                      (string: TrackingConfidence enum - "Low" or "High")
+LeftHand_HandConfidence                    <- HandState.HandConfidence                                (bool as 0/1: 0=Low, 1=High)
+LeftHand_FingerConf_Thumb                  <- HandState.FingerConfidences[Thumb]                      (bool as 0/1: 0=Low, 1=High)
+LeftHand_FingerConf_Index                  <- HandState.FingerConfidences[Index]                      (bool as 0/1: 0=Low, 1=High)
+LeftHand_FingerConf_Middle                 <- HandState.FingerConfidences[Middle]                     (bool as 0/1: 0=Low, 1=High)
+LeftHand_FingerConf_Ring                   <- HandState.FingerConfidences[Ring]                       (bool as 0/1: 0=Low, 1=High)
+LeftHand_FingerConf_Pinky                  <- HandState.FingerConfidences[Pinky]                      (bool as 0/1: 0=Low, 1=High)
 LeftHand_RequestedTS                       <- HandState.RequestedTimeStamp                            (double: seconds)
 LeftHand_SampleTS                          <- HandState.SampleTimeStamp                               (double: seconds)
 
@@ -117,22 +118,21 @@ RightHand_*                                <- Same fields as LeftHand (Hand.Hand
 # [Collector: OVRBodyCollector]
 Body_Time                                   <- OVRPlugin.GetBodyState4(step,...).Time                 (double: seconds)
 Body_Confidence                             <- state.Confidence
-Body_Fidelity                               <- state.Fidelity                                          (string: TrackingConfidence enum)
-                                                                                                       Possible values: "Low", "High"
-Body_CalibrationStatus                      <- state.CalibrationStatus                                 (string: BodyCalibrationStatus enum)
-                                                                                                       Possible values: "Invalid", "Calibrating", "Valid"
+Body_Fidelity                               <- state.Fidelity                                          (bool as 0/1: 0=Low, 1=High)
+Body_CalibrationStatus_Invalid             <- state.CalibrationStatus                                 (bool as 0/1: Invalid flag)
+Body_CalibrationStatus_Calibrating          <- state.CalibrationStatus                                 (bool as 0/1: Calibrating flag)
+Body_CalibrationStatus_Valid                <- state.CalibrationStatus                                 (bool as 0/1: Valid flag)
+                                                                                                       Note: Only one calibration status flag can be 1 at a time (mutually exclusive)
 Body_SkeletonChangedCount                   <- state.SkeletonChangedCount                              (int: increments when skeleton changes)
 
 # For each joint J in SDK BoneId enum order (names starting with "Body_"):
 <Body_JointName>_px/_py/_pz                          <- state.JointLocations[jointIndex].Pose.Position.{x,y,z}  (e.g., Body_Root_px, Body_Hips_px)  [converted to world space]
 <Body_JointName>_qx/_qy/_qz/_qw                      <- state.JointLocations[jointIndex].Pose.Orientation.{x,y,z,w}  [converted to world space]
-<Body_JointName>_Flags                               <- state.JointLocations[jointIndex].LocationFlags          (string: SpaceLocationFlags enum)
-                                                                                                                  Possible flags (can be combined):
-                                                                                                                  "OrientationValid" (0x1): orientation can be used
-                                                                                                                  "PositionValid" (0x2): position can be used
-                                                                                                                  "OrientationTracked" (0x4): orientation actively tracked
-                                                                                                                  "PositionTracked" (0x8): position actively tracked
-                                                                                                                  Example: "OrientationValid, PositionValid, OrientationTracked, PositionTracked"
+<Body_JointName>_Flags_OrientationValid              <- state.JointLocations[jointIndex].LocationFlags          (bool as 0/1: OrientationValid flag - orientation can be used)
+<Body_JointName>_Flags_PositionValid                 <- state.JointLocations[jointIndex].LocationFlags          (bool as 0/1: PositionValid flag - position can be used)
+<Body_JointName>_Flags_OrientationTracked            <- state.JointLocations[jointIndex].LocationFlags          (bool as 0/1: OrientationTracked flag - orientation actively tracked)
+<Body_JointName>_Flags_PositionTracked               <- state.JointLocations[jointIndex].LocationFlags          (bool as 0/1: PositionTracked flag - position actively tracked)
+                                                                                                                  Note: Multiple flags can be 1 simultaneously (flags can be combined)
 
 # - Custom transforms (experiment-specific; registered order) -
 # [Collector: CustomTransformsCollector]
